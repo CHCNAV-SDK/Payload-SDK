@@ -416,6 +416,7 @@ chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
   parameter_handler_st.get_capture_interval = get_capture_interval;
   parameter_handler_st.set_picture_format = set_picture_format;
   parameter_handler_st.get_picture_format = get_picture_format;
+  parameter_handler_st.set_picture_quality = set_picture_quality;
   parameter_handler_st.get_picture_quality = get_picture_quality;
   parameter_handler_st.set_video_encode_format = set_video_encode_format;
   parameter_handler_st.get_video_encode_format = get_video_encode_format;
