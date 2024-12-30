@@ -1,4 +1,89 @@
-MIT License
+The following portions of the CHCNAV’s Payload SDK (“Software” referred to in the terms below) are made available to you under the terms of the MIT License. A copy of the MIT license is available at https://opensource.org/licenses/MIT.
+.
+├── CMakeLists.txt
+├── docs
+│   └── cn
+│       ├── 安全须知.md
+│       ├── camera_manager
+│       │   └── 相机管理.md
+│       ├── chcnav_core
+│       │   ├── 错误码.md
+│       │   ├── CHCNAV版本信息.md
+│       │   ├── CHCNAV_Core.md
+│       │   ├── CHCNAV_Hlog.md
+│       │   └── CHCNAV_Typedef.md
+│       ├── gimbal
+│       │   └── 云台功能.md
+│       ├── gimbal_manager
+│       │   └── 云台管理.md
+│       ├── payload_camera
+│       │   └── 相机功能.md
+│       ├── PSDK API 概览.md
+│       └── README.md
+├── LICENSE
+├── psdk_lib
+│   ├── include
+│   │   ├── chcnav_camera_manager.h
+│   │   ├── chcnav_core.h
+│   │   ├── chcnav_error.h
+│   │   ├── chcnav_gimbal.h
+│   │   ├── chcnav_gimbal_manager.h
+│   │   ├── chcnav_hlog.h
+│   │   ├── chcnav_payload_camera.h
+│   │   ├── chcnav_platform.h
+│   │   ├── chcnav_typedef.h
+│   │   └── chcnav_version.h
+│   └── lib
+│       ├── aarch64-linux-gnu-gcc
+│       │   └── libpayloadsdk.a
+│       ├── arm-linux-gnueabi-gcc
+│       │   └── libpayloadsdk.a
+│       ├── arm-linux-gnueabihf-gcc
+│       │   └── libpayloadsdk.a
+│       └── x86_64-linux-gnu-gcc
+│           └── libpayloadsdk.a
+├── README.md
+├── samples
+│   ├── README.md
+│   └── sample_c++
+│       ├── modules_sample
+│       │   ├── camera_manager
+│       │   │   ├── test_camera_manager.cpp
+│       │   │   └── test_camera_manager.h
+│       │   ├── gimbal
+│       │   │   ├── test_gimbal.cpp
+│       │   │   └── test_gimbal.h
+│       │   ├── gimbal_manager
+│       │   │   ├── test_gimbal_manager.cpp
+│       │   │   └── test_gimbal_manager.h
+│       │   ├── hlog
+│       │   │   ├── chcnav_log_basic_test.cpp
+│       │   │   └── hlog-example.conf
+│       │   └── payload_camera
+│       │       ├── test_payload_camera.cpp
+│       │       └── test_payload_camera.h
+│       └── platform
+│           └── linux
+│               └── nvidia_jetson
+│                   ├── CMakeLists.txt
+│                   ├── docs
+│                   │   └── 示例程序说明.md
+│                   ├── hal
+│                   │   ├── hal_network.cpp
+│                   │   ├── hal_network.h
+│                   │   ├── hal_uart.cpp
+│                   │   └── hal_uart.h
+│                   ├── main.cpp
+│                   └── osal
+│                       ├── osal.cpp
+│                       ├── osal_fs.cpp
+│                       ├── osal_fs.h
+│                       ├── osal.h
+│                       ├── osal_socket.cpp
+│                       └── osal_socket.h
+└── tools
+    ├── chcnav-psdk-tool.exe
+    └── README.md
 
 Copyright (c) 2024 CHCNAV-SDK
 
