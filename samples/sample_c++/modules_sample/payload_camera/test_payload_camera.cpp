@@ -48,8 +48,7 @@ get_camera_state(CHCNAV_CAMERA_SYSTEM_STATE_STRUCT *system_state) {
 }
 
 chcnav_return_code_t get_camera_sn(CHCNAV_CAMERA_SN_STRUCT *camera_sn) {
-  snprintf((char *)camera_sn->serial_number, sizeof(camera_sn->serial_number),
-           "C30Ch_5.13.002.14.0C30.25");
+  snprintf((char *)camera_sn->serial_number, sizeof(camera_sn->serial_number),"C30Ch_5.13.002.14.0C30.25");
   return CHCNAV_RETURN_OK;
 }
 
@@ -58,7 +57,7 @@ get_camera_capability(CHCNAV_CAMERA_CAP_STRUCT *camera_cap) {
   camera_cap->zoom_flag = 1;
   camera_cap->focus_flag = 1;
   camera_cap->ircut_flag = 1;
-  camera_cap->exposure_mode_flag = 1;
+  camera_cap->exposure_mode_flag = 1 ;
   camera_cap->iso_flag = 1;
   camera_cap->aperture_flag = 1;
   camera_cap->shutter_flag = 1;
@@ -114,9 +113,7 @@ chcnav_return_code_t get_image_time_interval_settings(
   return CHCNAV_RETURN_OK;
 }
 
-chcnav_return_code_t get_video_stream_information(
-    uint8_t stream_id,
-    CHCNAV_CAMERA_VIDEO_STREAM_INFORMATION_STRUCT *video_stream_info) {
+chcnav_return_code_t get_video_stream_information(uint8_t stream_id,CHCNAV_CAMERA_VIDEO_STREAM_INFORMATION_STRUCT *video_stream_info) {
   video_stream_info->stream_id = stream_id;
   video_stream_info->count = 6;
   video_stream_info->type = CHCNAV_CAMERA_VIDEO_STREAM_TYPE_RTSP;
@@ -127,10 +124,8 @@ chcnav_return_code_t get_video_stream_information(
   video_stream_info->bitrate = 30;
   video_stream_info->rotation = 10;
   video_stream_info->hfov = 10;
-  snprintf((char *)video_stream_info->name, sizeof(video_stream_info->name),
-           "test stream");
-  snprintf((char *)video_stream_info->uri, sizeof(video_stream_info->uri),
-           "rtsp://admin:admin@192.168.1.101:554/1/live");
+  snprintf((char *)video_stream_info->name, sizeof(video_stream_info->name), "test stream");
+  snprintf((char *)video_stream_info->uri, sizeof(video_stream_info->uri), "rtsp://admin:admin@192.168.1.101:554/1/live");
 
   return CHCNAV_RETURN_OK;
 }
@@ -197,7 +192,10 @@ chcnav_return_code_t get_aperture(float *value) {
   return CHCNAV_RETURN_OK;
 }
 
-chcnav_return_code_t get_iso(uint32_t *value) { return CHCNAV_RETURN_OK; }
+chcnav_return_code_t get_iso(uint32_t *value) {
+  *value = 305;
+  return CHCNAV_RETURN_OK;
+}
 
 chcnav_return_code_t get_ev(float *value) {
   *value = 80;
@@ -340,11 +338,35 @@ chcnav_return_code_t get_media_config(CHCNAV_CAMERA_CONFIG_STRUCT *config) {
   return CHCNAV_RETURN_OK;
 }
 
-chcnav_return_code_t
-set_digicam_config(CHCNAV_CAMERA_EXPOSURE_MODE_E exposure_mode,
-                   uint32_t shutter_speed, float aperture, uint32_t iso,
-                   float exposure_compensation_value) {
+chcnav_return_code_t set_digicam_config(CHCNAV_CAMERA_EXPOSURE_MODE_E exposure_mode,uint32_t shutter_speed,float aperture,uint32_t iso,float exposure_compensation_value) {
   // do digicam config
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t set_camera_source(uint8_t device_id,CHCNAV_CAMERA_SOURCE_E primary_source,CHCNAV_CAMERA_SOURCE_E second_source) {
+  // set camera source
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t set_camera_track_point(float x,float y,float radius,uint8_t device_id) {
+  // set camera track point
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t set_camera_ir_mode(CHCNAV_CAMERA_IR_MODE_E mode) {
+  // set camera ir mode
+  return CHCNAV_RETURN_OK;
+}
+chcnav_return_code_t get_camera_ir_mode(CHCNAV_CAMERA_IR_MODE_E *mode){
+  *mode = CHCNAV_CAMERA_IR_MODE_BLACK_HOT;
+  return CHCNAV_RETURN_OK;
+}
+chcnav_return_code_t set_stream_osd(CHCNAV_STREAM_OSD_MODE_E mode){
+  // set stream osd mode
+  return CHCNAV_RETURN_OK;
+}
+chcnav_return_code_t get_stream_osd(CHCNAV_STREAM_OSD_MODE_E *mode){
+  *mode = CHCNAV_STREAM_OSD_MODE_OPEN;
   return CHCNAV_RETURN_OK;
 }
 
@@ -425,6 +447,12 @@ chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
   parameter_handler_st.set_media_config = set_media_config;
   parameter_handler_st.get_media_config = get_media_config;
   parameter_handler_st.set_digicam_config = set_digicam_config;
+  parameter_handler_st.set_camera_source = set_camera_source;
+  parameter_handler_st.set_camera_track_point = set_camera_track_point;
+  parameter_handler_st.set_camera_ir_mode = set_camera_ir_mode;
+  parameter_handler_st.get_camera_ir_mode = get_camera_ir_mode;
+  parameter_handler_st.set_stream_osd = set_stream_osd;
+  parameter_handler_st.get_stream_osd = get_stream_osd;
 
   ret = chcnav_payload_camera_register_parameter_handler(&parameter_handler_st);
   if (ret != CHCNAV_RETURN_OK) {

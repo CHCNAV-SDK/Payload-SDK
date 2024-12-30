@@ -35,8 +35,6 @@ extern "C" {
 #define CHCNAV_RESULT_FAITURE (-1)
 #define CHCNAV_RESULT_SUCCESS 0
 
-// Chcnav core uart,used to camera manager
-#define CHCNAV_CORE_UART_DEV_NAME "/dev/ttyUSB0"
 /**
  * @brief Type define double as chcnav_f64_t.
  */
@@ -77,7 +75,10 @@ typedef enum {
 
 typedef enum {
   CHCNAV_UAV_SERIES_UNKNOWN = 0,
-  CHCNAV_UAV_SERIES_X500 = 1
+  CHCNAV_UAV_SERIES_X500 = 1,
+  CHCNAV_UAV_SERIES_P60 = 2,
+  CHCNAV_UAV_SERIES_P330PRO = 3,
+  CHCNAV_UAV_SERIES_BB4 = 4
 } CHCNAV_UAV_SERIES_E;
 
 typedef enum {
@@ -167,20 +168,27 @@ typedef struct {
  * @brief Represents an attitude using floating-point values for pitch, roll, and yaw.
  */
 typedef struct {
-    chcnav_f32_t pitch; /*!< Pitch angle in degrees. */
-    chcnav_f32_t roll;  /*!< Roll angle in degrees. */
-    chcnav_f32_t yaw;   /*!< Yaw angle in degrees. */
+    chcnav_f32_t pitch; /* Pitch angle in degrees. */
+    chcnav_f32_t roll;  /* Roll angle in degrees. */
+    chcnav_f32_t yaw;   /* Yaw angle in degrees. */
 } CHCNAV_ATTITUDE_STRCUT;
 
 /**
  * @brief Represents a quaternion, when converted to a rotation matrix or Euler angles.
  */
 typedef struct {
-    chcnav_f32_t q0; /*!< Quaternion component w. */
-    chcnav_f32_t q1; /*!< Quaternion component x. */
-    chcnav_f32_t q2; /*!< Quaternion component y. */
-    chcnav_f32_t q3; /*!< Quaternion component z. */
+    chcnav_f32_t q0; /* Quaternion component w. */
+    chcnav_f32_t q1; /* Quaternion component x. */
+    chcnav_f32_t q2; /* Quaternion component y. */
+    chcnav_f32_t q3; /* Quaternion component z. */
 } CHCNAV_QUATERNION_STRUCT;
+
+typedef enum {
+    CHCNAV_GIMBAL_MODE_LOCK                        = 0, /* Lock mode, fix gimbal attitude in the ground coordinate, ignoring movement of aircraft. */
+    CHCNAV_GIMBAL_MODE_FPV                         = 1, /* FPV (First Person View) mode, only control roll and yaw angle of gimbal in the ground coordinate to follow aircraft. */
+    CHCNAV_GIMBAL_MODE_YAW_FOLLOW                  = 2, /* Yaw follow mode, only control yaw angle of gimbal in the ground coordinate to follow aircraft. */
+} CHCNAV_GIMBAL_MODE_E;
+
 #ifdef __cplusplus
 }
 #endif

@@ -35,7 +35,7 @@ chcnav_return_code_t chcnav_core_start();
  * @brief DeInitialize the Payload SDK core.
  * @return Execution result.
  */
-chcnav_return_code_t chcnav_core_uninit(void);
+chcnav_return_code_t chcnav_core_deinit(void);
 #ifdef __cplusplus
 }
 #endif

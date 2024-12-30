@@ -61,8 +61,10 @@ typedef void *chcnav_dir_handle_t;
 typedef void *chcnav_socket_handle_t;
 
 typedef enum {
+  /*used by camera manager */
   CHCNAV_HAL_UART_NUM_0 = 0,
-  CHCNAV_HAL_UART_NUM_1
+  /*used by payload camera */
+  CHCNAV_HAL_UART_NUM_1 = 1,
 } CHCNAV_HAL_UART_NUM_E;
 
 typedef enum {
@@ -98,7 +100,7 @@ typedef struct {
 } CHCNAV_FILE_INFO_STRUCT;
 
 typedef struct {
-  chcnav_return_code_t (*uart_init)(uint32_t baud_rate,
+  chcnav_return_code_t (*uart_init)(CHCNAV_HAL_UART_NUM_E uart_num, uint32_t baud_rate,
                                     chcnav_uart_handle_t *uart_handle);
 
   chcnav_return_code_t (*uart_deinit)(chcnav_uart_handle_t uart_handle);
@@ -113,7 +115,7 @@ typedef struct {
   chcnav_return_code_t (*uart_read_data_timeout)(chcnav_uart_handle_t uart_handle,
                                         uint8_t *buffer, uint32_t len,
                                         uint32_t *real_len,uint64_t timeout);
-  chcnav_return_code_t (*uart_get_status)(CHCNAV_UART_STATUS_STRUCT *status);
+  chcnav_return_code_t (*uart_get_status)(CHCNAV_HAL_UART_NUM_E uart_num, CHCNAV_UART_STATUS_STRUCT *status);
 } CHCNAV_HAL_UART_HANDLER_STRUCT;
 
 typedef struct {

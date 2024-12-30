@@ -213,6 +213,25 @@ typedef enum
    CHCNAV_CAMERA_VIDEO_STREAM_STATUS_FLAGS_ENUM_END=3,
 } CHCNAV_CAMERA_VIDEO_STREAM_STATUS_FLAGS_E;
 
+typedef enum
+{
+   CHCNAV_CAMERA_SOURCE_DEFAULT=0, /* Default camera source. */
+   CHCNAV_CAMERA_SOURCE_RGB=1, /* RGB camera source. */
+   CHCNAV_CAMERA_SOURCE_IR=2, /* IR camera source. */
+   CHCNAV_CAMERA_SOURCE_NDVI=3, /* NDVI camera source. */
+} CHCNAV_CAMERA_SOURCE_E;
+
+typedef enum {
+  CHCNAV_STREAM_OSD_MODE_CLOSED = 0, /* camerea osd closed. */
+  CHCNAV_STREAM_OSD_MODE_OPEN = 1,   /* camerea osd is opened. */
+} CHCNAV_STREAM_OSD_MODE_E;
+
+typedef enum {
+  CHCNAV_CAMERA_IR_MODE_WHITE_HOT = 0, /* IR camerea white hot mode. */
+  CHCNAV_CAMERA_IR_MODE_BLACK_HOT = 1,   /* IR camerea black hot mode. */
+  CHCNAV_CAMERA_IR_MODE_PSEUDO_COLOR = 2, /* IR camerea pseudo color mode. */
+} CHCNAV_CAMERA_IR_MODE_E;
+
 /**
  * @brief Camera metering range when in spot metering mode.
  */
@@ -822,7 +841,49 @@ typedef struct {
    */
   chcnav_return_code_t (*set_digicam_config)(CHCNAV_CAMERA_EXPOSURE_MODE_E exposure_mode,uint32_t shutter_speed,float aperture,uint32_t iso,float exposure_compensation_value);
 
+  /**
+   * @brief Used to Set camera source. Changes the camera's active sources on cameras with multiple image sensors.
+   * @param device_id: 1-6 for cameras, 0 for all cameras.
+   * @param primary_source: Primary Source.
+   * @param second_source: Secondary Source. If non-zero the second source will be displayed as picture-in-picture.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*set_camera_source)(uint8_t device_id,CHCNAV_CAMERA_SOURCE_E primary_source,CHCNAV_CAMERA_SOURCE_E second_source);
 
+  /**
+   * @brief Used to initiate the camera tracking.
+   * @param x: Point to track x value (normalized 0..1, 0 is left, 1 is right).
+   * @param y: Point to track y value (normalized 0..1, 0 is top, 1 is bottom).
+   * @param radius: Point radius (normalized 0..1, 0 is one pixel, 1 is full image width).
+   * @param device_id: 1 to 6 for cameras,0: all cameras
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*set_camera_track_point)(float x,float y,float radius,uint8_t device_id);
+
+  /**
+   * @brief Used to set camer ir mode.
+   * @param mode: Camera ir mode,defined in enum CHCNAV_CAMERA_IR_MODE_E
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*set_camera_ir_mode) (CHCNAV_CAMERA_IR_MODE_E mode);
+  /**
+   * @brief Used to get camer ir mode.
+   * @param mode: Camera ir mode,defined in enum CHCNAV_CAMERA_IR_MODE_E
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*get_camera_ir_mode) (CHCNAV_CAMERA_IR_MODE_E *mode);
+  /**
+   * @brief Used to set stream osd mode.
+   * @param mode: Stream osd mode,defined in enum CHCNAV_STREAM_OSD_MODE_E
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*set_stream_osd) (CHCNAV_STREAM_OSD_MODE_E mode);
+  /**
+   * @brief Used to get stream osd mode.
+   * @param mode: Stream osd mode,defined in enum CHCNAV_STREAM_OSD_MODE_E
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*get_stream_osd) (CHCNAV_STREAM_OSD_MODE_E *mode);
 } CHCNAV_CAMERA_PARAMETER_HANDLER_STRUCT;
 
 /**

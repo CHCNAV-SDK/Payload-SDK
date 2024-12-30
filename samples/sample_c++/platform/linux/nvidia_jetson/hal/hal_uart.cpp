@@ -18,7 +18,7 @@ typedef struct {
   int uart_fd;
 } UART_HANDLE_STRUCT;
 
-chcnav_return_code_t hal_uart_init(uint32_t baud_rate,
+chcnav_return_code_t hal_uart_init(CHCNAV_HAL_UART_NUM_E uart_num, uint32_t baud_rate,
                                    chcnav_uart_handle_t *uart_handle) {
 
   struct flock lock;
@@ -32,8 +32,12 @@ chcnav_return_code_t hal_uart_init(uint32_t baud_rate,
   if (uart_handle_struct == nullptr) {
     return CHCNAV_RETURN_ERR_ALLOC;
   }
-
-  strcpy(uart_name, LINUX_UART_DEV);
+  if (uart_num == CHCNAV_HAL_UART_NUM_0)
+    strcpy(uart_name, CHCNAV_CORE_UART_DEV_NAME);
+  else if (uart_num == CHCNAV_HAL_UART_NUM_1)
+    strcpy(uart_name, LINUX_UART_DEV);
+  else
+    goto free_handle;
 
   if (0 != access(uart_name, F_OK)) {
     goto free_handle;
@@ -223,7 +227,10 @@ hal_uart_read_data_timeout(chcnav_uart_handle_t uart_handle, uint8_t *buffer,
   return CHCNAV_RETURN_OK;
 }
 
-chcnav_return_code_t hal_uart_get_status(CHCNAV_UART_STATUS_STRUCT *status) {
-  status->is_connect = true;
+chcnav_return_code_t hal_uart_get_status(CHCNAV_HAL_UART_NUM_E uart_num, CHCNAV_UART_STATUS_STRUCT *status) {
+  if (uart_num == CHCNAV_HAL_UART_NUM_0)
+    status->is_connect = true;
+  else if (uart_num == CHCNAV_HAL_UART_NUM_1)
+    status->is_connect = true;
   return CHCNAV_RETURN_OK;
 }

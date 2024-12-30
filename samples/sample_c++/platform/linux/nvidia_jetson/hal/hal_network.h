@@ -18,18 +18,16 @@
 extern "C" {
 #endif
 
-#define LINUX_NETWORK_DEV "eth1"
+#define LINUX_NETWORK_DEV           "eth1"
 
-#define USB_NET_ADAPTER_VID (0x0312)
-#define USB_NET_ADAPTER_PID (0x2010)
+#define USB_NET_ADAPTER_VID         (0x0312)
+#define USB_NET_ADAPTER_PID         (0x2010)
 
-#define LINUX_CMD_STR_MAX_SIZE (128)
+#define LINUX_CMD_STR_MAX_SIZE      (128)
 
-chcnav_return_code_t hal_network_init(const char *ip_addr, const char *net_mask,
-                                      chcnav_network_handle_t *network_handle);
+chcnav_return_code_t hal_network_init(const char *ip_addr, const char *net_mask, chcnav_network_handle_t *network_handle);
 chcnav_return_code_t hal_network_deinit(chcnav_network_handle_t network_handle);
-chcnav_return_code_t
-hal_network_get_device_info(CHCNAV_HAL_NETWORK_DEVICE_INFO_STRUCT *device_info);
+chcnav_return_code_t hal_network_get_device_info(CHCNAV_HAL_NETWORK_DEVICE_INFO_STRUCT *device_info);
 
 #ifdef __cplusplus
 }

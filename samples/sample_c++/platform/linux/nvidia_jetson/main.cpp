@@ -7,6 +7,8 @@
 #include "osal/osal_socket.h"
 #include "test_camera_manager.h"
 #include "test_payload_camera.h"
+#include "test_gimbal_manager.h"
+#include "test_gimbal.h"
 #include <chrono>
 #include <iostream>
 #include <signal.h>
@@ -122,6 +124,10 @@ int main(int argc, char *argv[]) {
                  "functions interactively                    |\n"
               << "| [b] Run payload camera sample - you can test camera's "
                  "functions interactively                    |\n"
+              << "| [c] Run gimbal manager sample - you can test gimbal's "
+                 "functions interactively                    |\n"
+			  << "| [d] Run gimbal sample - you can test gimbal's "
+			     "functions interactively                    |\n"
               << "| [q] Quit test program                                      "
                  "                                      |\n"
               << std::endl;
@@ -154,6 +160,29 @@ int main(int argc, char *argv[]) {
         goto EXIT;
       break;
     }
+    case 'c':
+      chcnav_run_gimbal_manager_sample();
+      break;
+    case 'd': {
+      char gimbalStr;
+      ret = chcnav_test_gimbal_start();
+      std::cout << "chcnav_test_gimbal_start ret :" << ret << std::endl;
+      if (ret != CHCNAV_RETURN_OK) {
+        std::cout << "chcnav_test_gimbal_start failed" << std::endl;
+        goto EXIT;
+      }
+
+      ret = chcnav_core_start();
+      if (ret != CHCNAV_RETURN_OK) {
+        std::cout << "chcnav_core_start failed" << std::endl;
+        goto EXIT;
+      }
+      std::cout << "input \'q\' to exit gimbal test program" << std::endl;
+      std::cin >> gimbalStr;
+      if (gimbalStr == 'q')
+        goto EXIT;
+      break;
+    }
     default:
       std::cout << "invalid input" << std::endl;
       break;
@@ -161,7 +190,7 @@ int main(int argc, char *argv[]) {
   }
 
 EXIT:
-  chcnav_core_uninit();
+  chcnav_core_deinit();
   std::cout << "chcnav psdk end" << std::endl;
   return 0;
 }

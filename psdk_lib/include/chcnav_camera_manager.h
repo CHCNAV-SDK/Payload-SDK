@@ -18,307 +18,307 @@
 extern "C" {
 #endif
 
-/*!
+/**
  * @brief Camera work modes.
  */
 typedef enum {
-  /*!
+  /**
    - Capture mode. Supports capturing pictures.
    */
   CHCNAV_CAMERA_MANAGER_WORK_MODE_SHOOT_PHOTO = 0,
-  /*!
+  /**
    - Record mode. Supports record videos.
    */
   CHCNAV_CAMERA_MANAGER_WORK_MODE_RECORD_VIDEO = 1,
-  /*!
+  /**
    * The camera work mode is unknown.
    */
   CHCNAV_CAMERA_MANAGER_WORK_MODE_UNKNOWN = 0xFF,
 } CHCNAV_CAMETA_MANAGER_WORK_MODE_E;
 
-/*!
+/**
  * @brief The ShootPhoto mode, set the photography method. The default value is
  * SINGLE.
  */
 typedef enum {
-  /*!
+  /**
    - single shoot photo.
    */
   CHCNAV_CAMERA_MANAGER_SHOOT_PHOTO_MODE_SINGLE = 0x01,
-  /*!
+  /**
    - Sets the camera to take a picture (or multiple pictures) continuously at
      a set time interval.
    */
   CHCNAV_CAMERA_MANAGER_SHOOT_PHOTO_MODE_INTERVAL = 0x06,
-  /*!
+  /**
    - The shoot photo mode is unknown.
    */
   CHCNAV_CAMERA_MANAGER_SHOOT_PHOTO_MODE_UNKNOWN = 0xFF,
 } CHCNAV_CAMERA_MANAGER_SHOOT_PHOTO_MODE_E;
 
-/*!
+/**
  * @brief The exposure mode determines whether the shutter speed, aperture,
  * and ISO can be automatically or manually set, The default value is AUTO.
  */
 typedef enum {
-  CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_PROGRAM_AUTO = 1, /*!< Auto mode */
+  CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_PROGRAM_AUTO = 1, /* Auto mode */
   CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_SHUTTER_PRIORITY =
-      2, /*!< Shutter priority mode */
+      2, /* Shutter priority mode */
   CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_APERTURE_PRIORITY =
-      3, /*!< Aperture priority mode */
-  CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_EXPOSURE_MANUAL = 4, /*!< Manual mode */
+      3, /* Aperture priority mode */
+  CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_EXPOSURE_MANUAL = 4, /* Manual mode */
   CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_UNKNOWN =
-      0xFF /*!< The camera exposure mode is unknown. */
+      0xFF /* The camera exposure mode is unknown. */
 } CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_E;
 
-/*!
+/**
  * @brief Camera focus mode.
  */
 typedef enum {
-  /*!
+  /**
    - Set the camera focus mode to auto mode.
    */
   CHCNAV_CAMERA_MANAGER_FOCUS_MODE_AUTO = 1,
-  /*!
+  /**
    - Set the camera focus mode to Continuous AF.
    */
   CHCNAV_CAMERA_MANAGER_FOCUS_MODE_AFC = 2,
-  /*!
+  /**
    - The camera's focus mode is unknown.
    */
   CHCNAV_CAMERA_MANAGER_FOCUS_MODE_UNKNOWN = 0xFF,
 } CHCNAV_CAMERA_MANAGER_FOCUS_MODE_E;
 
-/*!
+/**
  * @brief Camera shutter speed values.
  */
 typedef enum {
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_8000 = 0,     /*!< 1/8000 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_6400 = 1,     /*!< 1/6400 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_6000 = 2,     /*!< 1/6000 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_5000 = 3,     /*!< 1/5000 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_4000 = 4,     /*!< 1/4000 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_3200 = 5,     /*!< 1/3200 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_3000 = 6,     /*!< 1/3000 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_2500 = 7,     /*!< 1/2500 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_2000 = 8,     /*!< 1/2000 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_1600 = 9,     /*!< 1/1600 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_1500 = 10,    /*!< 1/1500 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_1250 = 11,    /*!< 1/1250 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_1000 = 12,    /*!< 1/1000 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_800 = 13,     /*!< 1/800 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_725 = 14,     /*!< 1/725 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_640 = 15,     /*!< 1/640 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_500 = 16,     /*!< 1/500 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_400 = 17,     /*!< 1/400 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_320 = 19,     /*!< 1/320 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_200 = 22,     /*!< 1/200 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_100 = 27,     /*!< 1/100 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_90 = 28,      /*!< 1/90 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_80 = 29,      /*!< 1/80 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_60 = 30,      /*!< 1/60 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_50 = 31,      /*!< 1/50 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_40 = 32,      /*!< 1/40 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_30 = 33,      /*!< 1/30 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_20 = 35,      /*!< 1/20 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_10 = 38,      /*!< 1/10 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_5 = 41,       /*!< 1/5 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1 = 48,         /*!< 1.0 s */
-  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_UNKNOWN = 0xFF, /*!< Unknown */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_8000 = 0,     /* 1/8000 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_6400 = 1,     /* 1/6400 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_6000 = 2,     /* 1/6000 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_5000 = 3,     /* 1/5000 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_4000 = 4,     /* 1/4000 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_3200 = 5,     /* 1/3200 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_3000 = 6,     /* 1/3000 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_2500 = 7,     /* 1/2500 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_2000 = 8,     /* 1/2000 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_1600 = 9,     /* 1/1600 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_1500 = 10,    /* 1/1500 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_1250 = 11,    /* 1/1250 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_1000 = 12,    /* 1/1000 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_800 = 13,     /* 1/800 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_725 = 14,     /* 1/725 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_640 = 15,     /* 1/640 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_500 = 16,     /* 1/500 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_400 = 17,     /* 1/400 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_320 = 19,     /* 1/320 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_200 = 22,     /* 1/200 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_100 = 27,     /* 1/100 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_90 = 28,      /* 1/90 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_80 = 29,      /* 1/80 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_60 = 30,      /* 1/60 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_50 = 31,      /* 1/50 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_40 = 32,      /* 1/40 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_30 = 33,      /* 1/30 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_20 = 35,      /* 1/20 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_10 = 38,      /* 1/10 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1_5 = 41,       /* 1/5 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_1 = 48,         /* 1.0 s */
+  CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_UNKNOWN = 0xFF, /* Unknown */
 } CHCNAV_CAMERA_MANAGER_SHUTTER_SPEED_E;
 
-/*!
+/**
  * @brief Camera ISO values.
  */
 typedef enum {
-  /*! The ISO value is automatically set. */
+  /** The ISO value is automatically set. */
   CHCNAV_CAMERA_MANAGER_ISO_AUTO = 0x00,
-  /*!  The ISO value is set to 100. */
+  /* The ISO value is set to 100. */
   CHCNAV_CAMERA_MANAGER_ISO_100 = 0x03,
-  /*! The ISO value is set to 200. */
+  /* The ISO value is set to 200. */
   CHCNAV_CAMERA_MANAGER_ISO_200 = 0x04,
-  /*! The ISO value is set to 400.*/
+  /* The ISO value is set to 400.*/
   CHCNAV_CAMERA_MANAGER_ISO_400 = 0x05,
-  /*! The ISO value is set to 800.*/
+  /* The ISO value is set to 800.*/
   CHCNAV_CAMERA_MANAGER_ISO_800 = 0x06,
-  /*! The ISO value is set to 1600.*/
+  /* The ISO value is set to 1600.*/
   CHCNAV_CAMERA_MANAGER_ISO_1600 = 0x07,
-  /*! The ISO value is set to 3200.*/
+  /* The ISO value is set to 3200.*/
   CHCNAV_CAMERA_MANAGER_ISO_3200 = 0x08,
-  /*! The ISO value is set to 6400.*/
+  /* The ISO value is set to 6400.*/
   CHCNAV_CAMERA_MANAGER_ISO_6400 = 0x09,
-  /*! The ISO value is set to 12800.*/
+  /* The ISO value is set to 12800.*/
   CHCNAV_CAMERA_MANAGER_ISO_12800 = 0x0A,
-  /*! The ISO value is set to 25600.*/
+  /* The ISO value is set to 25600.*/
   CHCNAV_CAMERA_MANAGER_ISO_25600 = 0x0B,
-  /*! The ISO value is determined by the camera */
+  /* The ISO value is determined by the camera */
   CHCNAV_CAMERA_MANAGER_ISO_FIXED = 0xFF,
 } CHCNAV_CAMERA_MANAGER_ISO_E;
 
-/*!
+/**
  * @brief Camera exposure compensation.
  */
 typedef enum {
-  /*! The camera's exposure compensation is -5.0ev.*/
+  /* The camera's exposure compensation is -5.0ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_5_0 = 1,
-  /*! The camera's exposure compensation is -4.7ev.*/
+  /* The camera's exposure compensation is -4.7ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_4_7 = 2,
-  /*! The camera's exposure compensation is -4.3ev.*/
+  /* The camera's exposure compensation is -4.3ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_4_3 = 3,
-  /*! The camera's exposure compensation is -4.0ev.*/
+  /* The camera's exposure compensation is -4.0ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_4_0 = 4,
-  /*! The camera's exposure compensation is -3.7ev.*/
+  /* The camera's exposure compensation is -3.7ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_3_7 = 5,
-  /*! The camera's exposure compensation is -3.3ev.*/
+  /* The camera's exposure compensation is -3.3ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_3_3 = 6,
-  /*! The camera's exposure compensation is -3.0ev.*/
+  /* The camera's exposure compensation is -3.0ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_3_0 = 7,
-  /*! The camera's exposure compensation is -2.7ev.*/
+  /* The camera's exposure compensation is -2.7ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_2_7 = 8,
-  /*! The camera's exposure compensation is -2.3ev.*/
+  /* The camera's exposure compensation is -2.3ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_2_3 = 9,
-  /*! The camera's exposure compensation is -2.0ev.*/
+  /* The camera's exposure compensation is -2.0ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_2_0 = 10,
-  /*! The camera's exposure compensation is -1.7ev.*/
+  /* The camera's exposure compensation is -1.7ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_1_7 = 11,
-  /*! The camera's exposure compensation is -1.3ev.*/
+  /* The camera's exposure compensation is -1.3ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_1_3 = 12,
-  /*! The camera's exposure compensation is -1.0ev.*/
+  /* The camera's exposure compensation is -1.0ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_1_0 = 13,
-  /*! The camera's exposure compensation is -0.7ev.*/
+  /* The camera's exposure compensation is -0.7ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_0_7 = 14,
-  /*! The camera's exposure compensation is -0.3ev.*/
+  /* The camera's exposure compensation is -0.3ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_0_3 = 15,
-  /*! The camera's exposure compensation is 0.0ev.*/
+  /* The camera's exposure compensation is 0.0ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_N_0_0 = 16,
-  /*! The camera's exposure compensation is +0.3ev.*/
+  /* The camera's exposure compensation is +0.3ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_0_3 = 17,
-  /*! The camera's exposure compensation is +0.7ev.*/
+  /* The camera's exposure compensation is +0.7ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_0_7 = 18,
-  /*! The camera's exposure compensation is +1.0ev.*/
+  /* The camera's exposure compensation is +1.0ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_1_0 = 19,
-  /*! The camera's exposure compensation is +1.3ev.*/
+  /* The camera's exposure compensation is +1.3ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_1_3 = 20,
-  /*! The camera's exposure compensation is +1.7ev.*/
+  /* The camera's exposure compensation is +1.7ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_1_7 = 21,
-  /*! The camera's exposure compensation is +2.0ev.*/
+  /* The camera's exposure compensation is +2.0ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_2_0 = 22,
-  /*! The camera's exposure compensation is +2.3ev.*/
+  /* The camera's exposure compensation is +2.3ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_2_3 = 23,
-  /*! The camera's exposure compensation is +2.7ev.*/
+  /* The camera's exposure compensation is +2.7ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_2_7 = 24,
-  /*! The camera's exposure compensation is +3.0ev.*/
+  /* The camera's exposure compensation is +3.0ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_3_0 = 25,
-  /*! The camera's exposure compensation is +3.3ev.*/
+  /* The camera's exposure compensation is +3.3ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_3_3 = 26,
-  /*! The camera's exposure compensation is +3.7ev.*/
+  /* The camera's exposure compensation is +3.7ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_3_7 = 27,
-  /*! The camera's exposure compensation is +4.0ev.*/
+  /* The camera's exposure compensation is +4.0ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_4_0 = 28,
-  /*! The camera's exposure compensation is +4.3ev.*/
+  /* The camera's exposure compensation is +4.3ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_4_3 = 29,
-  /*! The camera's exposure compensation is +4.7ev.*/
+  /* The camera's exposure compensation is +4.7ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_4_7 = 30,
-  /*! The camera's exposure compensation is +5.0ev.*/
+  /* The camera's exposure compensation is +5.0ev.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_5_0 = 31,
-  /*! The camera's exposure compensation is fixed by the camera.*/
+  /* The camera's exposure compensation is fixed by the camera.*/
   CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_FIXED = 0xFF,
 } CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_E;
 
-/*!
+/**
  * @brief Cameraaperture values.
  */
 typedef enum {
-  /*! The Aperture value is f/1.6.*/
+  /* The Aperture value is f/1.6.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_1_DOT_6 = 160,
-  /*! The Aperture value is f/1.7.*/
+  /* The Aperture value is f/1.7.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_1_DOT_7 = 170,
-  /*! The Aperture value is f/1.8.*/
+  /* The Aperture value is f/1.8.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_1_DOT_8 = 180,
-  /*! The Aperture value is f/2.*/
+  /* The Aperture value is f/2.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_2 = 200,
-  /*! The Aperture value is f/2.2.*/
+  /* The Aperture value is f/2.2.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_2_DOT_2 = 220,
-  /*! The Aperture value is f/2.4.*/
+  /* The Aperture value is f/2.4.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_2_DOT_4 = 240,
-  /*! The Aperture value is f/2.5.*/
+  /* The Aperture value is f/2.5.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_2_DOT_5 = 250,
-  /*! The Aperture value is f/2.6.*/
+  /* The Aperture value is f/2.6.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_2_DOT_6 = 260,
-  /*! The Aperture value is f/2.8.*/
+  /* The Aperture value is f/2.8.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_2_DOT_8 = 280,
-  /*! The Aperture value is f/3.2.*/
+  /* The Aperture value is f/3.2.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_3_DOT_2 = 320,
-  /*! The Aperture value is f/3.4.*/
+  /* The Aperture value is f/3.4.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_3_DOT_4 = 340,
-  /*! The Aperture value is f/3.5.*/
+  /* The Aperture value is f/3.5.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_3_DOT_5 = 350,
-  /*! The Aperture value is f/4.*/
+  /* The Aperture value is f/4.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_4 = 400,
-  /*! The Aperture value is f/4.5.*/
+  /* The Aperture value is f/4.5.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_4_DOT_5 = 450,
-  /*! The Aperture value is f/4.8.*/
+  /* The Aperture value is f/4.8.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_4_DOT_8 = 480,
-  /*! The Aperture value is f/5.*/
+  /* The Aperture value is f/5.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_5 = 500,
-  /*! The Aperture value is f/5.6.*/
+  /* The Aperture value is f/5.6.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_5_DOT_6 = 560,
-  /*! The Aperture value is f/6.3.*/
+  /* The Aperture value is f/6.3.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_6_DOT_3 = 630,
-  /*! The Aperture value is f/6.8.*/
+  /* The Aperture value is f/6.8.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_6_DOT_8 = 680,
-  /*! The Aperture value is f/7.1.*/
+  /* The Aperture value is f/7.1.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_7_DOT_1 = 710,
-  /*! The Aperture value is f/8.*/
+  /* The Aperture value is f/8.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_8 = 800,
-  /*! The Aperture value is f/9.*/
+  /* The Aperture value is f/9.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_9 = 900,
-  /*! The Aperture value is f/9.6.*/
+  /* The Aperture value is f/9.6.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_9_DOT_6 = 960,
-  /*! The Aperture value is f/10.*/
+  /* The Aperture value is f/10.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_10 = 1000,
-  /*! The Aperture value is f/11.*/
+  /* The Aperture value is f/11.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_11 = 1100,
-  /*! The Aperture value is f/13.*/
+  /* The Aperture value is f/13.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_13 = 1300,
-  /*! The Aperture value is f/14.*/
+  /* The Aperture value is f/14.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_14 = 1400,
-  /*! The Aperture value is f/16.*/
+  /* The Aperture value is f/16.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_16 = 1600,
-  /*! The Aperture value is f/18.*/
+  /* The Aperture value is f/18.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_18 = 1800,
-  /*! The Aperture value is f/19.*/
+  /* The Aperture value is f/19.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_19 = 1900,
-  /*! The Aperture value is f/20.*/
+  /* The Aperture value is f/20.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_20 = 2000,
-  /*! The Aperture value is f/22.*/
+  /* The Aperture value is f/22.*/
   CHCNAV_CAMERA_MANAGER_APERTURE_F_22 = 2200,
-  /*! The Aperture value is Unknown. */
+  /* The Aperture value is Unknown. */
   CHCNAV_CAMERA_MANAGER_APERTURE_F_UNKNOWN = 0xFFFF,
 } CHCNAV_CAMERA_MANAGER_APERTURE_E;
 
-/*!
+/**
  * @brief Camera metering mode values.
  */
 typedef enum {
-  /*! Set the camera metering mode to center metering.*/
+  /* Set the camera metering mode to center metering.*/
   CHCNAV_CAMERA_MANAGER_METERING_MODE_CENTRAL = 0,
-  /*! Set the camera metering mode to average metering.*/
+  /* Set the camera metering mode to average metering.*/
   CHCNAV_CAMERA_MANAGER_METERING_MODE_AVERAGE = 1,
-  /*! Set the camera metering mode to spot metering.*/
+  /* Set the camera metering mode to spot metering.*/
   CHCNAV_CAMERA_MANAGER_METERING_MODE_SPOT = 2,
-  /*! Set the camera metering mode to Unknown.*/
+  /* Set the camera metering mode to Unknown.*/
   CHCNAV_CAMERA_MANAGER_METERING_MODE_UNKNOWN = 0xFF,
 } CHCNAV_CAMERA_MANAGER_METERING_MODE_E;
 
-/*!
+/**
  * @brief Get camera firmware version.
  */
 typedef struct {
   uint8_t firmware_version[4];
 } CHCNAV_CAMERA_MANAGER_FIRMWARE_VERSION_STRUCT;
 
-/*!
+/**
  * @brief Get camera capture state.
  * The camera working mode must be set to
  * CHCNAV_CAMERA_MANAGER_WORK_MODE_SHOOT_PHOTO.
@@ -334,7 +334,7 @@ typedef enum {
   CHCNAV_CAMERA_MANAGER_CAPTURING_STATE_MULTI = 2,
 } CHCNAV_CAMERA_MANAGER_CAPTURING_STATE_E;
 
-/*!
+/**
  * @brief Get camera record state.
  * The camera working mode must be set to
  * CHCNAV_CAMERA_MANAGER_WORK_MODE_RECORD_VIDEO.
@@ -346,7 +346,7 @@ typedef enum {
   CHCNAV_CAMERA_MANAGER_RECORDING_STATE_STOPPING = 3,
 } CHCNAV_CAMERA_MANAGER_RECORDING_STATE_E;
 
-/*!
+/**
  * @brief Get camera storage device information.
  */
 typedef struct {
