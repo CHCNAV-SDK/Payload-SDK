@@ -2,9 +2,24 @@
 #include "chcnav_payload_camera.h"
 #include <iostream>
 
-namespace chcnav {
-namespace psdk {
-namespace modules_sample {
+class TestPayloadCamera final {
+public:
+  static TestPayloadCamera &get_instance() {
+    static TestPayloadCamera test_payload_camera;
+    return test_payload_camera;
+  }
+  bool chcnav_test_payload_camera_is_inited();
+  chcnav_return_code_t chcnav_test_payload_camera_start();
+
+private:
+  TestPayloadCamera() = default;
+  ~TestPayloadCamera() = default;
+  TestPayloadCamera(const TestPayloadCamera &) = delete;
+  TestPayloadCamera &operator=(const TestPayloadCamera &) = delete;
+
+private:
+  bool is_test_payload_camera_inited{false};
+};
 
 chcnav_return_code_t
 get_camera_information(CHCNAV_CAMERA_INFORMATION_STRUCT *camera_information) {
@@ -20,7 +35,7 @@ get_camera_information(CHCNAV_CAMERA_INFORMATION_STRUCT *camera_information) {
   snprintf((char *)camera_information->vendor_name,
            sizeof(camera_information->vendor_name), "CHCNAV");
   snprintf((char *)camera_information->model_name,
-           sizeof(camera_information->model_name), "C30");
+           sizeof(camera_information->model_name), "R10ps");
   snprintf((char *)camera_information->cam_definition_uri,
            sizeof(camera_information->cam_definition_uri),
            "http://192.168.1.102:8554/caminfo.xml");
@@ -468,6 +483,22 @@ chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
 bool TestPayloadCamera::chcnav_test_payload_camera_is_inited() {
   return is_test_payload_camera_inited;
 }
-} // namespace modules_sample
-} // namespace psdk
-} // namespace chcnav
+
+void chcnav_run_payload_camera_sample(void)
+{
+	chcnav_return_code_t ret;
+	ret = TestPayloadCamera::get_instance().chcnav_test_payload_camera_start();
+		if (ret != CHCNAV_RETURN_OK) {
+		return;
+	}
+#ifdef __linux__
+  std::string input;
+  while(true)
+  {
+    std::cin >> input;
+    if (input == "q") {
+        return;
+    }
+  }
+#endif
+}

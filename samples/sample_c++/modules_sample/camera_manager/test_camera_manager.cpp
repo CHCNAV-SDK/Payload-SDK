@@ -353,15 +353,15 @@ void chcnav_run_camera_manager_sample()
             <<
             endl;
         cout
-            << "| [1] Select gimbal mount position at NO.1 payload port                                            |"
+            << "| [1] Select camera mount position at NO.1 payload port                                            |"
             <<
             endl;
         cout
-            << "| [2] Select gimbal mount position at NO.2 payload port                                            |"
+            << "| [2] Select camera mount position at NO.2 payload port                                            |"
             <<
             endl;
         cout
-            << "| [3] Select gimbal mount position at NO.3 payload port                                            |"
+            << "| [3] Select camera mount position at NO.3 payload port                                            |"
             <<
             endl;
         cout
@@ -402,12 +402,12 @@ void chcnav_run_camera_manager_sample()
         connect_count++;
         printf("Waiting for the camera to connect.\n");
         chcnav_camera_manager_get_camera_connect_status(cameraMountPosition, &connect_status);
-        if (connect_count > 20)
+        if (connect_count > 10)
         {
             printf("can not connect to cameras...\n");
             goto ExitCameraManager;
         }
-        osal_handler->task_sleep_ms(2000);
+        osal_handler->task_sleep_ms(1000);
     }
     
     printf("--> Step 2: Get camera type and version\n");

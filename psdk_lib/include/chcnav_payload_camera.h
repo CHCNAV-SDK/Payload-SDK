@@ -927,6 +927,13 @@ chcnav_return_code_t chcnav_payload_camera_register_parameter_handler(
 chcnav_return_code_t chcnav_payload_camera_get_video_stream_network_address(
     char *ip_addr, int ip_addr_len, uint16_t *port);
 
+
+/**
+ * @brief DeInitialize the payload camera module.
+ * @return Execution result.
+ */
+chcnav_return_code_t chcnav_payload_camera_deinit();
+
 #ifdef __cplusplus
 }
 #endif

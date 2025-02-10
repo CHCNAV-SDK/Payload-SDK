@@ -8,6 +8,7 @@ include_directories(
     ../../../modules_sample/camera_manager/
     ../../../modules_sample/gimbal_manager/
     ../../../modules_sample/gimbal/
+    ../../../modules_sample/fc_subscription/
 )
 
 file(GLOB GLOB_SRCS
@@ -18,6 +19,7 @@ file(GLOB GLOB_SRCS
     ../../../modules_sample/camera_manager/*.cpp
     ../../../modules_sample/gimbal_manager/*.cpp
     ../../../modules_sample/gimbal/*.cpp
+    ../../../modules_sample/fc_subscription/*.c
 )
 
 

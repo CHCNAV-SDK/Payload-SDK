@@ -8,8 +8,8 @@ extern "C" {
 #define CHCNAV_VERSION_MAJOR 0
 #define CHCNAV_VERSION_MINOR 0
 #define CHCNAV_VERSION_PATCH 1
-#define CHCNAV_VERSION_BRANCH "psdk_release"
-#define CHCNAV_VERSION_COMMIT "e69e4eb"
+#define CHCNAV_VERSION_BRANCH "feature/psdk_gimbal"
+#define CHCNAV_VERSION_COMMIT "3c55856"
 
 #ifdef __cplusplus
 }

@@ -9,6 +9,7 @@
 #include "test_payload_camera.h"
 #include "test_gimbal_manager.h"
 #include "test_gimbal.h"
+#include "test_fc_subscription.h"
 #include <chrono>
 #include <iostream>
 #include <signal.h>
@@ -126,8 +127,8 @@ int main(int argc, char *argv[]) {
                  "functions interactively                    |\n"
               << "| [c] Run gimbal manager sample - you can test gimbal's "
                  "functions interactively                    |\n"
-			  << "| [d] Run gimbal sample - you can test gimbal's "
-			     "functions interactively                    |\n"
+              << "| [d] Run gimbal sample - you can test gimbal's "
+                 "functions interactively                    |\n"
               << "| [q] Quit test program                                      "
                  "                                      |\n"
               << std::endl;
@@ -141,23 +142,7 @@ int main(int argc, char *argv[]) {
       chcnav_run_camera_manager_sample();
       break;
     case 'b': {
-      char cameraStr;
-      ret = chcnav::psdk::modules_sample::TestPayloadCamera::get_instance()
-                .chcnav_test_payload_camera_start();
-      if (ret != CHCNAV_RETURN_OK) {
-        std::cout << "chcnav_test_payload_camera_start failed" << std::endl;
-        goto EXIT;
-      }
-
-      ret = chcnav_core_start();
-      if (ret != CHCNAV_RETURN_OK) {
-        std::cout << "chcnav_core_start failed" << std::endl;
-        goto EXIT;
-      }
-      std::cout << "input \'q\' to exit camera test program" << std::endl;
-      std::cin >> cameraStr;
-      if (cameraStr == 'q')
-        goto EXIT;
+      chcnav_run_payload_camera_sample();
       break;
     }
     case 'c':

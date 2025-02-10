@@ -139,6 +139,23 @@ typedef enum {
       1 /* Zooms in, increasing the zoom factor. */
 } CHCNAV_CAMERA_ZOOM_DIRECTION_E;
 
+
+typedef enum {
+    CHCNAV_GIMBAL_MODE_LOCK                        = 0, /* Lock mode, fix gimbal attitude in the ground coordinate, ignoring movement of aircraft. */
+    CHCNAV_GIMBAL_MODE_FPV                         = 1, /* FPV (First Person View) mode, only control roll and yaw angle of gimbal in the ground coordinate to follow aircraft. */
+    CHCNAV_GIMBAL_MODE_YAW_FOLLOW                  = 2, /* Yaw follow mode, only control yaw angle of gimbal in the ground coordinate to follow aircraft. */
+} CHCNAV_GIMBAL_MODE_E;
+
+/**
+ * @brief Subscription frequency type.
+ */
+typedef enum {
+    CHCNAV_SUBSCRIPTION_TOPIC_1_HZ            = 1,
+    CHCNAV_SUBSCRIPTION_TOPIC_10_HZ           = 10,
+    CHCNAV_SUBSCRIPTION_TOPIC_50_HZ           = 50,
+    CHCNAV_SUBSCRIPTION_TOPIC_100_HZ          = 100,
+} CHCNAV_SUBSCRIPTION_TOPIC_FREQ_E;
+
 typedef struct {
   chcnav_f32_t focus_x; /* Specifies the horizontal coordinate within the
                           zone. Range: 0 to 1. The point [0.0, 0.0] represents
@@ -165,6 +182,15 @@ typedef struct {
 } CHCNAV_CAMERA_PHOTO_TIME_INTERVAL_SETTINGS_STRUCT;
 
 /**
+ * @brief Represents a vector using floating-point coordinates.
+ */
+typedef struct {
+    chcnav_f32_t x; /*!< X-coordinate of the vector. */
+    chcnav_f32_t y; /*!< Y-coordinate of the vector. */
+    chcnav_f32_t z; /*!< Z-coordinate of the vector. */
+} CHCNAV_VECTOR_3F_STRUCT;
+
+/**
  * @brief Represents an attitude using floating-point values for pitch, roll, and yaw.
  */
 typedef struct {
@@ -183,12 +209,26 @@ typedef struct {
     chcnav_f32_t q3; /* Quaternion component z. */
 } CHCNAV_QUATERNION_STRUCT;
 
-typedef enum {
-    CHCNAV_GIMBAL_MODE_LOCK                        = 0, /* Lock mode, fix gimbal attitude in the ground coordinate, ignoring movement of aircraft. */
-    CHCNAV_GIMBAL_MODE_FPV                         = 1, /* FPV (First Person View) mode, only control roll and yaw angle of gimbal in the ground coordinate to follow aircraft. */
-    CHCNAV_GIMBAL_MODE_YAW_FOLLOW                  = 2, /* Yaw follow mode, only control yaw angle of gimbal in the ground coordinate to follow aircraft. */
-} CHCNAV_GIMBAL_MODE_E;
+/**
+ * @brief Timestamp data structure.
+ */
+typedef struct {
+    uint64_t microsecond; //unit:us
+} CHCNAV_TIMESTAMP_STRUCT;
 
+/**
+ * @brief Prototype of callback function used to receive data of topic.
+ * @warning User can not execute blocking style operations or functions in the callback function, because that will block PSDK
+ * root thread, causing problems such as slow system response, payload disconnection or infinite loop.
+ * @param data: pointer to data of the topic, user need transfer type of this pointer to the corresponding data structure
+ * pointer for getting every item of the topic conveniently.
+ * @param dataSize: the size of memory space pointed by data argument, equal to data structure size corresponding to the topic.
+ * @param timestamp: pointer to timestamp corresponding this data. Use flight controller power-on timestamp on M300 RTK.
+ * Use payload local timestamp on M30/M30T.
+ * @return Execution result.
+ */
+typedef chcnav_return_code_t (*CHCNAV_RECEIVE_DATA_OF_TOPIC_CALLBACK)(const uint8_t *data, uint16_t data_size,
+                                                         const CHCNAV_TIMESTAMP_STRUCT *timestamp);
 #ifdef __cplusplus
 }
 #endif
