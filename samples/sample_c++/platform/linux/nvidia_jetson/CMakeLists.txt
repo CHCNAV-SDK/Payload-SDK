@@ -25,12 +25,12 @@ file(GLOB GLOB_SRCS
 
 add_executable(${PROJECT_NAME}
         ${GLOB_SRCS})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../../../../../psdk_lib/lib/libpayloadsdk.a)
-add_dependencies(${PROJECT_NAME} payloadsdk)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../../../../../psdk_lib/lib/x86_64-linux-gnu-gcc/libpayloadsdk.a)
+#add_dependencies(${PROJECT_NAME} payloadsdk)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../../../../../psdk_lib/include)
 
 set_target_properties( ${PROJECT_NAME}
    PROPERTIES
    OUTPUT_NAME               ${PROJECT_NAME}
-   RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_INSTALL_BIN_RPATH}
+   RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_CURRENT_BINARY_DIR}
 )
