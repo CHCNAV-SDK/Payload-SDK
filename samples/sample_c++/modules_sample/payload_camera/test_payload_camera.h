@@ -10,6 +10,7 @@ extern "C" {
 #endif
 
 void chcnav_run_payload_camera_sample(void);
+void chcnav_stop_payload_camera_sample(void);
 
 #ifdef __cplusplus
 }

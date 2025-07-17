@@ -2,6 +2,14 @@
 #include "chcnav_payload_camera.h"
 #include <iostream>
 
+static CHCNAV_CAMERA_EXPOSURE_MODE_E g_camera_exposure_mode = CHCNAV_CAMERA_EXPOSURE_MODE_SHUTTER_PRIORITY;
+static uint32_t g_camera_iso = 100;
+static float g_camera_aperture = 80;
+static uint32_t g_camera_shutter_speed = 30;
+static float g_camera_ev = 1.0;
+static float g_camera_zoom = 1.0;
+static float g_camera_focus = 50;
+
 class TestPayloadCamera final {
 public:
   static TestPayloadCamera &get_instance() {
@@ -35,11 +43,12 @@ get_camera_information(CHCNAV_CAMERA_INFORMATION_STRUCT *camera_information) {
   snprintf((char *)camera_information->vendor_name,
            sizeof(camera_information->vendor_name), "CHCNAV");
   snprintf((char *)camera_information->model_name,
-           sizeof(camera_information->model_name), "R10ps");
+           sizeof(camera_information->model_name), "C10");
   snprintf((char *)camera_information->cam_definition_uri,
            sizeof(camera_information->cam_definition_uri),
            "http://192.168.1.102:8554/caminfo.xml");
   camera_information->lens_id = 0;
+  camera_information->camera_type = CHCNAV_CAMERA_TYPE_TELEPHOTO;
 
   return CHCNAV_RETURN_OK;
 }
@@ -129,19 +138,33 @@ chcnav_return_code_t get_image_time_interval_settings(
 }
 
 chcnav_return_code_t get_video_stream_information(uint8_t stream_id,CHCNAV_CAMERA_VIDEO_STREAM_INFORMATION_STRUCT *video_stream_info) {
-  video_stream_info->stream_id = stream_id;
-  video_stream_info->count = 6;
+  video_stream_info->stream_id = 1;
+  video_stream_info->count = 1;
   video_stream_info->type = CHCNAV_CAMERA_VIDEO_STREAM_TYPE_RTSP;
   video_stream_info->flags = CHCNAV_CAMERA_VIDEO_STREAM_STATUS_FLAGS_RUNNING;
-  video_stream_info->framerate = 15;
-  video_stream_info->resolution_h = 11648;
-  video_stream_info->resolution_v = 8736;
-  video_stream_info->bitrate = 30;
-  video_stream_info->rotation = 10;
-  video_stream_info->hfov = 10;
-  snprintf((char *)video_stream_info->name, sizeof(video_stream_info->name), "test stream");
+  video_stream_info->framerate = 30;
+  video_stream_info->resolution_h = 1920;
+  video_stream_info->resolution_v = 1080;
+  video_stream_info->bitrate = 1 * 1024 * 1024;
+  video_stream_info->rotation = 0;
+  video_stream_info->hfov = 90;
+  snprintf((char *)video_stream_info->name, sizeof(video_stream_info->name), "test_stream");
   snprintf((char *)video_stream_info->uri, sizeof(video_stream_info->uri), "rtsp://admin:admin@192.168.1.101:554/1/live");
+  video_stream_info->encoding = CHCNAV_CAMERA_VIDEO_ENCODING_H264;
+  return CHCNAV_RETURN_OK;
+}
 
+chcnav_return_code_t get_video_stream_status(
+    uint8_t stream_id,
+    CHCNAV_CAMERA_VIDEO_STREAM_STATUS_STRUCT *video_stream_status) {
+
+  video_stream_status->flags = CHCNAV_CAMERA_VIDEO_STREAM_STATUS_FLAGS_RUNNING;
+  video_stream_status->framerate = 15;
+  video_stream_status->resolution_h = 1920;
+  video_stream_status->resolution_v = 1080;
+  video_stream_status->bitrate = 30;
+  video_stream_status->rotation = 10;
+  video_stream_status->hfov = 10;
   return CHCNAV_RETURN_OK;
 }
 
@@ -162,30 +185,11 @@ get_sd_card_state(uint8_t storage_id,
   return CHCNAV_RETURN_OK;
 }
 chcnav_return_code_t format_sd_card(uint8_t storage_id) {
+  /* format SD Card. */
   return CHCNAV_RETURN_OK;
 }
 
 chcnav_return_code_t reset_system_settings() { return CHCNAV_RETURN_OK; }
-
-chcnav_return_code_t set_focus_mode(CHCNAV_CAMERA_FOCUS_MODE_E mode) {
-
-  return CHCNAV_RETURN_OK;
-}
-
-chcnav_return_code_t get_focus_mode(CHCNAV_CAMERA_FOCUS_MODE_E *mode) {
-  *mode = CHCNAV_CAMERA_FOCUS_TYPE_AUTO;
-  return CHCNAV_RETURN_OK;
-}
-
-chcnav_return_code_t set_zoom_mode(CHCNAV_CAMERA_ZOOM_MODE_E mode) {
-
-  return CHCNAV_RETURN_OK;
-}
-
-chcnav_return_code_t get_zoom_mode(CHCNAV_CAMERA_ZOOM_MODE_E *mode) {
-  *mode = CHCNAV_CAMERA_ZOOM_MODE_RANGE;
-  return CHCNAV_RETURN_OK;
-}
 
 chcnav_return_code_t set_exposure_mode(CHCNAV_CAMERA_EXPOSURE_MODE_E mode) {
 
@@ -193,27 +197,27 @@ chcnav_return_code_t set_exposure_mode(CHCNAV_CAMERA_EXPOSURE_MODE_E mode) {
 }
 
 chcnav_return_code_t get_exposure_mode(CHCNAV_CAMERA_EXPOSURE_MODE_E *mode) {
-  *mode = CHCNAV_CAMERA_EXPOSURE_MODE_SHUTTER_PRIORITY;
+  *mode = g_camera_exposure_mode;
   return CHCNAV_RETURN_OK;
 }
 
 chcnav_return_code_t get_shutter_speed(uint32_t *value) {
-  *value = 80;
+  *value = g_camera_shutter_speed;
   return CHCNAV_RETURN_OK;
 }
 
 chcnav_return_code_t get_aperture(float *value) {
-  *value = 80;
+  *value = g_camera_aperture;
   return CHCNAV_RETURN_OK;
 }
 
 chcnav_return_code_t get_iso(uint32_t *value) {
-  *value = 305;
+  *value = g_camera_iso;
   return CHCNAV_RETURN_OK;
 }
 
 chcnav_return_code_t get_ev(float *value) {
-  *value = 80;
+  *value = g_camera_ev;
   return CHCNAV_RETURN_OK;
 }
 
@@ -355,11 +359,34 @@ chcnav_return_code_t get_media_config(CHCNAV_CAMERA_CONFIG_STRUCT *config) {
 
 chcnav_return_code_t set_digicam_config(CHCNAV_CAMERA_EXPOSURE_MODE_E exposure_mode,uint32_t shutter_speed,float aperture,uint32_t iso,float exposure_compensation_value) {
   // do digicam config
+  g_camera_exposure_mode = exposure_mode;
+  g_camera_shutter_speed = shutter_speed;
+  g_camera_aperture = aperture;
+  g_camera_iso = iso;
+  g_camera_ev = exposure_compensation_value;
   return CHCNAV_RETURN_OK;
 }
 
-chcnav_return_code_t set_camera_source(uint8_t device_id,CHCNAV_CAMERA_SOURCE_E primary_source,CHCNAV_CAMERA_SOURCE_E second_source) {
-  // set camera source
+chcnav_return_code_t set_camera_source(uint8_t device_id, CHCNAV_CAMERA_VIDEO_STREAM_SOURCE_TYPE_E video_stream_source) {
+  printf("set video stream source is :%d\n", video_stream_source);
+  switch (video_stream_source)
+  {
+    case CHCNAV_CAMERA_VIDEO_STREAM_SOURCE_TYPE_TELEPHOTO:
+      /* Modify RTSP stream to telephoto camera stream data. */
+      break;
+    case CHCNAV_CAMERA_VIDEO_STREAM_SOURCE_TYPE_WIDE_ANGLE:
+      /* Modify RTSP stream to wide-angle camera stream data. */
+      break;
+    case CHCNAV_CAMERA_VIDEO_STREAM_SOURCE_TYPE_INFRARED:
+      /* Modify RTSP stream to infrared camera stream data. */
+      break;
+    case CHCNAV_CAMERA_VIDEO_STREAM_SOURCE_TYPE_PIP:
+      /* Modify RTSP stream to PIP stream data. */
+      break;
+    default:
+      break;
+  }
+
   return CHCNAV_RETURN_OK;
 }
 
@@ -370,28 +397,137 @@ chcnav_return_code_t set_camera_track_point(float x,float y,float radius,uint8_t
 
 chcnav_return_code_t set_camera_ir_mode(CHCNAV_CAMERA_IR_MODE_E mode) {
   // set camera ir mode
+  printf("set infrared color mode:%d\n", mode);
   return CHCNAV_RETURN_OK;
 }
 chcnav_return_code_t get_camera_ir_mode(CHCNAV_CAMERA_IR_MODE_E *mode){
-  *mode = CHCNAV_CAMERA_IR_MODE_BLACK_HOT;
+  *mode = CHCNAV_CAMERA_IR_MODE_WHITE_HOT;
   return CHCNAV_RETURN_OK;
 }
-chcnav_return_code_t set_stream_osd(CHCNAV_STREAM_OSD_MODE_E mode){
-  // set stream osd mode
+chcnav_return_code_t set_stream_osd(CHCNAV_CAMERA_OSD_CONFIGURE_STRUCT osd_config) {
+  // set stream osd config
+  printf("osd enable:%u, pitch_yaw_enable:%u, center_cross_enable:%u,time_enable:%u, range_enable:%u, gps_coordinates:%u, temperature_enable:%u\n",
+    osd_config.osd_enable, osd_config.pitch_yaw_enable, osd_config.center_cross_enable, osd_config.time_enable,
+    osd_config.range_enable, osd_config.gps_coordinates, osd_config.temperature_enable);
   return CHCNAV_RETURN_OK;
 }
-chcnav_return_code_t get_stream_osd(CHCNAV_STREAM_OSD_MODE_E *mode){
-  *mode = CHCNAV_STREAM_OSD_MODE_OPEN;
+chcnav_return_code_t get_stream_osd(CHCNAV_CAMERA_OSD_CONFIGURE_STRUCT *osd_config) {
+  osd_config->osd_enable = CHCNAV_STREAM_OSD_OPEN;
+  osd_config->pitch_yaw_enable = CHCNAV_STREAM_OSD_OPEN;
+  osd_config->center_cross_enable = CHCNAV_STREAM_OSD_CLOSED;
+  osd_config->time_enable = CHCNAV_STREAM_OSD_CLOSED;
+  osd_config->range_enable = CHCNAV_STREAM_OSD_CLOSED;
+  osd_config->gps_coordinates = CHCNAV_STREAM_OSD_CLOSED;
+  osd_config->temperature_enable = CHCNAV_STREAM_OSD_CLOSED;
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t get_camera_iso_list(uint16_t *count, uint16_t *capability){
+  *count = 6;
+  capability[0] = 100;
+  capability[1] = 200;
+  capability[2] = 400;
+  capability[3] = 800;
+  capability[4] = 1600;
+  capability[5] = 3200;
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t get_camera_shutter_list(uint16_t *count, uint16_t *capability){
+  *count = 8;
+  capability[0] = 1000; //shutter = 1/1000 s
+  capability[1] = 800;  //shutter = 1/800 s
+  capability[2] = 500;  //shutter = 1/500 s
+  capability[3] = 200;  //shutter = 1/200 s
+  capability[4] = 100;  //shutter = 1/100 s
+  capability[5] = 40;   //shutter = 1/40 s
+  capability[6] = 30;   //shutter = 1/30 s
+  capability[7] = 15;   //shutter = 1/15 s
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t get_camera_ir_color_list(uint16_t *count, uint16_t *capability)
+{
+  *count = 3;
+  capability[0] = CHCNAV_CAMERA_IR_MODE_WHITE_HOT;
+  capability[1] = CHCNAV_CAMERA_IR_MODE_BLACK_HOT;
+  capability[2] = CHCNAV_CAMERA_IR_MODE_RAINBOW;
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t get_camera_zoom_configure(CHCNAV_CAMERA_ZOOM_CONFIGURE_STRUCT* zoom_config)
+{
+  zoom_config->zoom = g_camera_zoom;
+  zoom_config->zoom_max = 30;
+  zoom_config->camera_type = CHCNAV_CAMERA_TYPE_TELEPHOTO;
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t camera_zoom_step(CHCNAV_CAMERA_ZOOM_DIRECTION_E direction)
+{
+  if (direction == CHCNAV_CAMERA_ZOOM_DIRECTION_IN)
+  {
+    /* Single step zoom in by 0.1x. */
+  }
+  else if (direction == CHCNAV_CAMERA_ZOOM_DIRECTION_OUT)
+  {
+    /* Single step zoom out by 0.1x. */
+  }
+  else
+    return CHCNAV_PAYLOAD_CAMERA_ERROR_INVALID_COMMAND_PARAMETER;
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t camera_continuous_zoom_start(CHCNAV_CAMERA_ZOOM_DIRECTION_E direction)
+{
+  if (direction == CHCNAV_CAMERA_ZOOM_DIRECTION_IN)
+  {
+    /* continuous zoom in until get stop. */
+  }
+  else if (direction == CHCNAV_CAMERA_ZOOM_DIRECTION_OUT)
+  {
+    /* ontinuous zoom out until get stop. */
+  }
+  else
+    return CHCNAV_PAYLOAD_CAMERA_ERROR_INVALID_COMMAND_PARAMETER;
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t camera_continuous_zoom_stop()
+{
+  /* Stop continuous zoom if continuous zoom was started. */
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t camera_zoom_by_value(float factor)
+{
+  /* Set the zoom according to the value of factor. */
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t get_camera_focus_configure(CHCNAV_CAMERA_FOCUS_CONFIGURE_STRUCT* focus_configs)
+{
+  focus_configs->focus = g_camera_focus;
+  focus_configs->focus_min = 0;
+  focus_configs->focus_max = 100;
+  focus_configs->camera_type = CHCNAV_CAMERA_TYPE_TELEPHOTO;
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t camera_manual_focus(float value)
+{
+  /* Set the focus according to the value. */
+  return CHCNAV_RETURN_OK;
+}
+
+chcnav_return_code_t camera_auto_continuous_focus()
+{
+  /* Set to automatic continuous zoom. */
   return CHCNAV_RETURN_OK;
 }
 
 chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
-  chcnav_return_code_t ret = -1;
-  ret = chcnav_payload_camera_init();
-  if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "chcnav_payload_camera_init failed" << std::endl;
-    return ret;
-  }
+  chcnav_return_code_t ret = CHCNAV_RETURN_ERR_FAILURE;
 
   CHCNAV_CAMERA_COMMON_HANDLER_STRUCT common_handler_st{};
   common_handler_st.get_camera_information = get_camera_information;
@@ -410,6 +546,7 @@ chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
       get_image_time_interval_settings;
 
   common_handler_st.get_video_stream_information = get_video_stream_information;
+  common_handler_st.get_video_stream_status = get_video_stream_status;
   common_handler_st.start_record_video = start_record_video;
   common_handler_st.stop_record_video = stop_record_video;
   common_handler_st.get_sd_card_state = get_sd_card_state;
@@ -424,10 +561,6 @@ chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
   }
 
   CHCNAV_CAMERA_PARAMETER_HANDLER_STRUCT parameter_handler_st{};
-  parameter_handler_st.set_focus_mode = set_focus_mode;
-  parameter_handler_st.get_focus_mode = get_focus_mode;
-  parameter_handler_st.set_zoom_mode = set_zoom_mode;
-  parameter_handler_st.get_zoom_mode = get_zoom_mode;
   parameter_handler_st.set_exposure_mode = set_exposure_mode;
   parameter_handler_st.get_exposure_mode = get_exposure_mode;
   parameter_handler_st.get_shutter_speed = get_shutter_speed;
@@ -468,6 +601,9 @@ chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
   parameter_handler_st.get_camera_ir_mode = get_camera_ir_mode;
   parameter_handler_st.set_stream_osd = set_stream_osd;
   parameter_handler_st.get_stream_osd = get_stream_osd;
+  parameter_handler_st.get_camera_iso_list = get_camera_iso_list;
+  parameter_handler_st.get_camera_shutter_list = get_camera_shutter_list;
+  parameter_handler_st.get_camera_ir_color_list = get_camera_ir_color_list;
 
   ret = chcnav_payload_camera_register_parameter_handler(&parameter_handler_st);
   if (ret != CHCNAV_RETURN_OK) {
@@ -476,7 +612,34 @@ chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
     return ret;
   }
 
-  is_test_payload_camera_inited = true;
+  CHCNAV_CAMERA_ZOOM_HANDLER_STRUCT zoom_handler_st{0};
+  zoom_handler_st.camera_zoom_step = camera_zoom_step;
+  zoom_handler_st.camera_continuous_zoom_start = camera_continuous_zoom_start;
+  zoom_handler_st.camera_continuous_zoom_stop = camera_continuous_zoom_stop;
+  zoom_handler_st.camera_zoom_by_value = camera_zoom_by_value;
+  zoom_handler_st.get_camera_zoom_configure = get_camera_zoom_configure;
+  ret = chcnav_camera_zoom_handler(&zoom_handler_st);
+  if (ret != CHCNAV_RETURN_OK) {
+    std::cout << "chcnav_camera_zoom_handler failed" << std::endl;
+    return ret;
+  }
+
+  CHCNAV_CAMERA_FOCUS_HANDLER_STRUCT focus_handle_st{0};
+  focus_handle_st.camera_manual_focus = camera_manual_focus;
+  focus_handle_st.camera_auto_continuous_focus = camera_auto_continuous_focus;
+  focus_handle_st.get_camera_focus_configure = get_camera_focus_configure;
+  ret = chcnav_camera_focus_handler(&focus_handle_st);
+  if (ret != CHCNAV_RETURN_OK) {
+    std::cout << "chcnav_camera_focus_handler failed" << std::endl;
+    return ret;
+  }
+
+  ret = chcnav_payload_camera_init();
+  if (ret != CHCNAV_RETURN_OK) {
+    std::cout << "chcnav_payload_camera_init failed" << std::endl;
+    return ret;
+  }
+  ret = is_test_payload_camera_inited = true;
   return CHCNAV_RETURN_OK;
 }
 
@@ -491,14 +654,9 @@ void chcnav_run_payload_camera_sample(void)
 		if (ret != CHCNAV_RETURN_OK) {
 		return;
 	}
-#ifdef __linux__
-  std::string input;
-  while(true)
-  {
-    std::cin >> input;
-    if (input == "q") {
-        return;
-    }
-  }
-#endif
+}
+
+void chcnav_stop_payload_camera_sample(void)
+{
+  chcnav_payload_camera_deinit();
 }

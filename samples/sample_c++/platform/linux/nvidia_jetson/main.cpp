@@ -119,18 +119,20 @@ int main(int argc, char *argv[]) {
   char moduleStr;
   while (true) {
     std::cout << "\n"
-              << "| Choose your test module:                                   "
-                 "                                      |\n"
-              << "| [a] Run camera manager sample - you can test camera's "
+              << "| Choose your test module:                                           "
+                 "                                           |\n"
+              << "| [0] Run multi module hybrid test - you can test gimbal camera      "
+                 " payload functions                         |\n"
+              << "| [a] Run camera manager module sample - you can test camera control "
                  "functions interactively                    |\n"
-              << "| [b] Run payload camera sample - you can test camera's "
+              << "| [b] Run payload camera module sample - you can test camera's       "
                  "functions interactively                    |\n"
-              << "| [c] Run gimbal manager sample - you can test gimbal's "
+              << "| [c] Run gimbal manager module sample - you can test gimbal control "
                  "functions interactively                    |\n"
-              << "| [d] Run gimbal sample - you can test gimbal's "
+              << "| [d] Run gimbal module sample - you can test gimbal's               "
                  "functions interactively                    |\n"
-              << "| [q] Quit test program                                      "
-                 "                                      |\n"
+              << "| [q] Quit test program                                              "
+                 "                                           |\n"
               << std::endl;
 
     std::cin >> moduleStr;
@@ -138,18 +140,42 @@ int main(int argc, char *argv[]) {
     case 'q':
       std::cout << "Quit..." << std::endl;
       goto EXIT;
+    case '0': {
+      char inputStr;
+      chcnav_test_gimbal_start();
+      chcnav_run_payload_camera_sample();
+      chcnav_run_fc_subscription_sample();
+      std::cout << "input \'q\' to exit multi module hybrid test program" << std::endl;
+      std::cin >> inputStr;
+      if (inputStr == 'q')
+      {
+        chcnav_test_gimbal_stop();
+        chcnav_stop_payload_camera_sample();
+        chcnav_stop_fc_subscription_sample();
+      }
+      break;
+    }
     case 'a':
       chcnav_run_camera_manager_sample();
       break;
     case 'b': {
+      char inputStr;
       chcnav_run_payload_camera_sample();
+      std::cout << "input \'q\' to exit test  payload camera program" << std::endl;
+      std::cin >> inputStr;
+      if (inputStr == 'q')
+      {
+        chcnav_stop_payload_camera_sample();
+      }
       break;
     }
-    case 'c':
+    case 'c': {
       chcnav_run_gimbal_manager_sample();
       break;
+    }
+  
     case 'd': {
-      char gimbalStr;
+      char inputStr;
       ret = chcnav_test_gimbal_start();
       std::cout << "chcnav_test_gimbal_start ret :" << ret << std::endl;
       if (ret != CHCNAV_RETURN_OK) {
@@ -163,9 +189,11 @@ int main(int argc, char *argv[]) {
         goto EXIT;
       }
       std::cout << "input \'q\' to exit gimbal test program" << std::endl;
-      std::cin >> gimbalStr;
-      if (gimbalStr == 'q')
-        goto EXIT;
+      std::cin >> inputStr;
+      if (inputStr == 'q')
+      {
+        chcnav_test_gimbal_stop();
+      }
       break;
     }
     default:

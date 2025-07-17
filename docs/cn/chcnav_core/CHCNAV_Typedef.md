@@ -95,7 +95,7 @@ Typedef 的头文件为chcnav_typedef.h，本文档描述了chcnav_typedef.h 文
     } CHCNAV_UAV_SERIES_E;
   ```
 - CHCNAV_CAMERA_E
-  挂载相机类型
+  挂载相机型号
   ```
     typedef enum {
         /* Camera is unknown. */
@@ -109,6 +109,20 @@ Typedef 的头文件为chcnav_typedef.h，本文档描述了chcnav_typedef.h 文
          /* Camera type is third party camera based on Payload SDK. */
         CHCNAV_CAMERA_PSDK = 30
     } CHCNAV_CAMERA_E;
+  ```
+- CHCNAV_CAMERA_TYPE_E
+  挂载相机功能类型
+  ```
+    typedef enum {
+      /* All of camera. */
+      CHCNAV_CAMERA_TYPE_ALL = 0,
+      /* Telephoto camera. */
+      CHCNAV_CAMERA_TYPE_TELEPHOTO = 1,
+      /* wide angle camera. */
+      CHCNAV_CAMERA_TYPE_WIDE_ANGLE = 2,
+      /* infrared camera. */
+      CHCNAV_CAMERA_TYPE_INFRARED = 3,
+    } CHCNAV_CAMERA_TYPE_E;
   ```
 - CHCNAV_DOWNLOAD_FILE_SUB_TYPE_E
   下载的文件类型
@@ -192,12 +206,14 @@ Typedef 的头文件为chcnav_typedef.h，本文档描述了chcnav_typedef.h 文
 - CHCNAV_GIMBAL_MODE_E
   ```
     typedef enum {
-         /* Lock mode, fix gimbal attitude in the ground coordinate, ignoring movement of aircraft. */
-        CHCNAV_GIMBAL_MODE_LOCK                        = 0,
-         /* FPV (First Person View) mode, only control roll and yaw angle of gimbal in the ground coordinate to follow aircraft. */
+        /* Free mode, can control pitch/yaw/roll angle. */
+        CHCNAV_GIMBAL_MODE_FREE                        = 0,
+        /* FPV (First Person View) mode, only control roll and yaw angle of gimbal in the ground coordinate to follow aircraft. */
         CHCNAV_GIMBAL_MODE_FPV                         = 1,
         /* Yaw follow mode, only control yaw angle of gimbal in the ground coordinate to follow aircraft. */
         CHCNAV_GIMBAL_MODE_YAW_FOLLOW                  = 2,
+         /* Lock mode, fix gimbal attitude in the ground coordinate, ignoring movement of aircraft. */
+        CHCNAV_GIMBAL_MODE_LOCK                        = 3,
     } CHCNAV_GIMBAL_MODE_E;
   ```
 

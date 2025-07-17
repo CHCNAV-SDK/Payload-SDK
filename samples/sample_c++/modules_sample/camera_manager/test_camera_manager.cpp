@@ -321,7 +321,7 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
 
             printf("region range: horizon %u, vitical %u\n", hrz_num, vtc_num);
             printf("Input meterting point (x, y) you want to set: ");
-            scanf("%u %u", &x, &y);
+            scanf("%hhu %hhu", &x, &y);
 
             printf("Try to set metering point as (%d, %d)", (uint8_t)x, (uint8_t)y);
             ret = chcnav_camera_manager_set_metering_point(position, x, y);

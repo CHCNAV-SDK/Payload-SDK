@@ -10,7 +10,7 @@ extern "C" {
 #endif
 
 chcnav_return_code_t chcnav_test_gimbal_start();
-
+void chcnav_test_gimbal_stop();
 bool chcnav_gimbal_is_inited();
 
 #ifdef __cplusplus

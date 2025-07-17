@@ -15,7 +15,11 @@ extern "C" {
  */
 void chcnav_run_fc_subscription_sample();
 
-
+/**
+ * @brief Stop fc subcription sample.
+ * @return void.
+ */
+void chcnav_stop_fc_subscription_sample();
 #ifdef __cplusplus
 }
 #endif

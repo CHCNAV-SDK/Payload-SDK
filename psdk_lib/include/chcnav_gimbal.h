@@ -32,6 +32,14 @@ typedef enum
    CHCNAV_GIMBAL_ERROR_FLAGS_ENUM_END=513, /*  */
 } CHCNAV_GIMBAL_ERROR_FLAGS_E;
 
+typedef enum
+{
+  CHCNAV_GIMBAL_ATTITUDE_COMPENSATION_DISABLE = 0,  /* Disable gimbal attitude compensation. */
+  CHCNAV_GIMBAL_ATTITUDE_COMPENSATION_ANGLE = 1,    /* Angle compensation for gimbal attitude. */
+  CHCNAV_GIMBAL_ATTITUDE_COMPENSATION_VELOCITY = 2, /* Angle velocity compensation for gimbal attitude. */
+  CHCNAV_GIMBAL_ATTITUDE_COMPENSATION_ANGLE_AND_VELOCITY = 3, /* Simultaneously perform angle and angular velocity compensation. */
+} CHCNAV_GIMBAL_ATTITUDE_COMPENSATION_E;
+
 typedef struct {
   uint64_t uid;              /*  UID of gimbal hardware (0 if unknown).*/
   uint32_t time_boot_ms;     /* [ms] Timestamp (time since system boot).*/
@@ -171,6 +179,18 @@ typedef struct {
    * @return Execution result.
    */
   chcnav_return_code_t (*reset_factory_settings)(void);
+
+  /**
+   * @brief  Set gimbal attitude compansation.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*set_gimbal_attitude_compansation_mode)(CHCNAV_GIMBAL_ATTITUDE_COMPENSATION_E mode);
+
+  /**
+   * @brief  Get gimbal attitude compansation.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*get_gimbal_attitude_compansation_mode)(CHCNAV_GIMBAL_ATTITUDE_COMPENSATION_E *mode);
 } CHCNAV_GIMBAL_COMMON_HANDLER_STRUCT;
 
 /**

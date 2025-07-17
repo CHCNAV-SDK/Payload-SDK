@@ -57,46 +57,6 @@ typedef enum {
 } CHCNAV_CAMERA_METERING_MODE_E;
 
 /**
- * @brief Camera focus mode.
- */
-typedef enum {
-  CHCNAV_CAMERA_FOCUS_TYPE_STEP =
-      0, /* Focus one step increment (-1 for focusing in, 1 for focusing out
-            towards infinity). */
-  CHCNAV_CAMERA_FOCUS_TYPE_CONTINUOUS =
-      1, /* Continuous focus up/down until stopped (-1 for focusing in, 1 for
-            focusing out towards infinity, 0 to stop focusing). */
-  CHCNAV_CAMERA_FOCUS_TYPE_RANGE =
-      2, /* Focus value as proportion of full camera focus range (a value
-            between 0.0 and 100.0) */
-  CHCNAV_CAMERA_FOCUS_TYPE_METERS = 3, /*Focus value in metres. */
-  CHCNAV_CAMERA_FOCUS_TYPE_AUTO = 4,   /* Focus automatically.*/
-  CHCNAV_CAMERA_FOCUS_TYPE_AUTO_SINGLE =
-      5, /*Single auto focus. Mainly used for still pictures. */
-  CHCNAV_CAMERA_FOCUS_TYPE_AUTO_CONTINUOUS =
-      6 /*Continuous auto focus. Mainly used for dynamic scenes. */
-} CHCNAV_CAMERA_FOCUS_MODE_E;
-
-/**
- * @brief Camera zoom mode.
- */
-typedef enum {
-  CHCNAV_CAMERA_ZOOM_MODE_STEP =
-      0, /*Zoom one step increment (-1 for wide, 1 for tele)*/
-  CHCNAV_CAMERA_ZOOM_MODE_CONTINUOUS =
-      1, /*Continuous zoom up/down until stopped (-1 for wide, 1 for tele, 0 to
-            stop zooming)*/
-  CHCNAV_CAMERA_ZOOM_MODE_RANGE =
-      2, /*Zoom value as proportion of full camera range (a percentage value
-            between 0.0 and 100.0)*/
-  CHCNAV_CAMERA_ZOOM_MODE_FOCAL_LENGTH =
-      3, /*Zoom value/variable focal length in millimetres. */
-  CHCNAV_CAMERA_ZOOM_MODE_HORIZONTAL_FOV =
-      4, /*Zoom value as horizontal field of view in degrees.*/
-  CHCNAV_CAMERA_ZOOM_TYPE_ENUM_END=5,
-} CHCNAV_CAMERA_ZOOM_MODE_E;
-
-/**
  * @brief Sdcard status.
  */
 typedef enum {
@@ -106,6 +66,7 @@ typedef enum {
   CHCNAV_CAMERA_SDCARD_STATUS_READY = 2, /*Sdcard present and ready.*/
   CHCNAV_CAMERA_SDCARD_STATUS_NOT_SUPPORTED =
       3, /*Camera does not supply sdcard status information.*/
+  CHCNAV_CAMERA_SDCARD_STATUS_FULL = 4, /*Sdcard is full*/
 } CHCNAV_CAMERA_SDCARD_STATUS_E;
 
 /**
@@ -117,7 +78,6 @@ typedef enum {
   CHCNAV_CAMERA_SDCARD_USAGE_FLAG_PHOTO = 2, /* Sdcard for saving photos. | */
   CHCNAV_CAMERA_SDCARD_USAGE_FLAG_VIDEO = 4, /* Sdcard for saving videos. | */
   CHCNAV_CAMERA_SDCARD_USAGE_FLAG_LOGS = 8,  /* Sdcard for saving logs. | */
-  CHCNAV_CAMERA_SDCARD_USAGE_FLAG_ENUM_END = 9, /*  | */
 } CHCNAV_CAMERA_SDCARD_USAGE_FLAG_E;
 
 /**
@@ -192,6 +152,15 @@ typedef enum {
 } CHCNAV_CAMERA_VIDEO_RECORD_FORMAT_E;
 
 /**
+ * @brief Camera video encoding format.
+ */
+typedef enum {
+  CHCNAV_CAMERA_VIDEO_ENCODING_UNKNOWN = 0,
+  CHCNAV_CAMERA_VIDEO_ENCODING_H264 = 1,
+  CHCNAV_CAMERA_VIDEO_ENCODING_H265 = 2,
+} CHCNAV_CAMERA_VIDEO_ENCODING_E;
+
+/**
  * @brief Camera video stream type.
  */
 typedef enum
@@ -213,6 +182,17 @@ typedef enum
    CHCNAV_CAMERA_VIDEO_STREAM_STATUS_FLAGS_ENUM_END=3,
 } CHCNAV_CAMERA_VIDEO_STREAM_STATUS_FLAGS_E;
 
+/**
+ * @brief Camera video stream source type.
+ */
+typedef enum
+{
+   CHCNAV_CAMERA_VIDEO_STREAM_SOURCE_TYPE_TELEPHOTO=1, /* Video stream from telephoto camera. */
+   CHCNAV_CAMERA_VIDEO_STREAM_SOURCE_TYPE_WIDE_ANGLE=2, /* Video stream from wide-angle camera. */
+   CHCNAV_CAMERA_VIDEO_STREAM_SOURCE_TYPE_INFRARED=3,   /* Video stream from infrared camera. */
+   CHCNAV_CAMERA_VIDEO_STREAM_SOURCE_TYPE_PIP=4,        /* Video stream from picture in picture. */
+} CHCNAV_CAMERA_VIDEO_STREAM_SOURCE_TYPE_E;
+
 typedef enum
 {
    CHCNAV_CAMERA_SOURCE_DEFAULT=0, /* Default camera source. */
@@ -222,14 +202,33 @@ typedef enum
 } CHCNAV_CAMERA_SOURCE_E;
 
 typedef enum {
-  CHCNAV_STREAM_OSD_MODE_CLOSED = 0, /* camerea osd closed. */
-  CHCNAV_STREAM_OSD_MODE_OPEN = 1,   /* camerea osd is opened. */
-} CHCNAV_STREAM_OSD_MODE_E;
+  CHCNAV_STREAM_OSD_OPEN = 1,   /* camerea osd is opened. */
+  CHCNAV_STREAM_OSD_CLOSED = 2, /* camerea osd closed. */
+} CHCNAV_STREAM_OSD_E;
 
 typedef enum {
-  CHCNAV_CAMERA_IR_MODE_WHITE_HOT = 0, /* IR camerea white hot mode. */
-  CHCNAV_CAMERA_IR_MODE_BLACK_HOT = 1,   /* IR camerea black hot mode. */
-  CHCNAV_CAMERA_IR_MODE_PSEUDO_COLOR = 2, /* IR camerea pseudo color mode. */
+  CHCNAV_CAMERA_IR_MODE_WHITE_HOT = 0,      /* White Hot: Hot objects appear white. */
+  CHCNAV_CAMERA_IR_MODE_BLACK_HOT = 1,      /* lack Hot: Hot objects appear black. */
+  CHCNAV_CAMERA_IR_MODE_IRON_RED = 2,       /* Iron Red: Rust-colored. */
+  CHCNAV_CAMERA_IR_MODE_LAVA = 3,           /* Lava: Red-orange gradient. */
+  CHCNAV_CAMERA_IR_MODE_RAINBOW = 4,        /* Rainbow: Full spectrum gradient. */
+  CHCNAV_CAMERA_IR_MODE_ARCTIC = 5,         /* Arctic: Blue-white cold emphasis. */
+  CHCNAV_CAMERA_IR_MODE_HC_RAINBOW = 6,     /* High Contrast Rainbow: Enhanced visibility. */
+  CHCNAV_CAMERA_IR_MODE_SKY = 7,            /* Sky: Blue gradient palette. */
+  CHCNAV_CAMERA_IR_MODE_MID_GRAY = 8,       /* Mid Gray: Neutral grayscale. */
+  CHCNAV_CAMERA_IR_MODE_GRAY_RED = 9,       /* Gray Red: Grayscale with red highlights. */
+  CHCNAV_CAMERA_IR_MODE_VIOLET_ORANGE = 10, /* Violet Orange: Purple-to-orange gradient. */
+  CHCNAV_CAMERA_IR_MODE_ALERT_RED = 11,     /* Alert Red: Red warning palette. */
+  CHCNAV_CAMERA_IR_MODE_ICE_FIRE = 12,      /* Ice Fire: Blue-red contrast. */
+  CHCNAV_CAMERA_IR_MODE_CYAN_RED = 13,      /* Cyan Red: Teal-to-red gradient. */
+  CHCNAV_CAMERA_IR_MODE_RED_GRADIENT = 14,  /* Red Gradient: Monochromatic red. */
+  CHCNAV_CAMERA_IR_MODE_GRAYSCALE = 15,     /* Grayscale: Classic black-white. */
+  CHCNAV_CAMERA_IR_MODE_GREEN_GRADIENT = 16,/* Green Gradient: Monochromatic green. */
+  CHCNAV_CAMERA_IR_MODE_YELLOW_GRADIENT = 17,/* Yellow Gradient: Monochromatic yellow. */
+  CHCNAV_CAMERA_IR_MODE_ALERT_GREEN = 18,   /* Alert Green: Green warning palette. */
+  CHCNAV_CAMERA_IR_MODE_ALERT_BLUE = 19,    /* Alert Blue: Blue warning palette. */
+  CHCNAV_CAMERA_IR_MODE_SPECIAL1 = 20,      /* Special Mode 1: Custom palette. */
+  CHCNAV_CAMERA_IR_MODE_SPECIAL2 = 21       /* Special Mode 2: Custom palette. */
 } CHCNAV_CAMERA_IR_MODE_E;
 
 /**
@@ -247,16 +246,6 @@ typedef struct {
   uint8_t col; /* Specifies column coordinate. */
   uint8_t row; /* Specifies row coordinate. */
 } CHCNAV_CAMERA_SPOT_METERING_TARGET_STRUCT;
-
-/**
- * @brief Camera focus assistant settings.
- */
-typedef struct {
-  bool is_enabled_mf; /* Specifies if the lens focus assistant is enabled for
-                         manual focusing. */
-  bool is_enabled_af; /* Specifies if the lens focus assistant is enabled for
-                         auto focusing. */
-} CHCNAV_CAMERA_FOCUS_ASSISTANT_SETTINGS_STRUCT;
 
 /**
  * @brief Information about camera sdcard.
@@ -305,6 +294,7 @@ typedef struct {
                 the file extension .xml.xz (a GCS that implements the protocol
                 must support decompressing the file). The string needs to be
                 zero terminated.*/
+  uint8_t camera_type;     /*camera type, 1:long focus 2:wide angle 3:infrared */
 } CHCNAV_CAMERA_INFORMATION_STRUCT;
 
 /**
@@ -336,6 +326,7 @@ typedef struct {
   uint16_t video_recording_time_seconds;   /* Current recording process time,
                                               uint:s. */
   bool has_error;                          /* Camera in error status. */
+  uint8_t video_stream_type;     /*camera type, 1:long focus 2:wide angle 3:infrared,4:Picture in Picture/Split Screen. */
 } CHCNAV_CAMERA_SYSTEM_STATE_STRUCT;
 
 /**
@@ -406,7 +397,42 @@ typedef struct {
  uint8_t type; /*<  Type of stream. CHCNAV_CAMERA_VIDEO_STREAM_TYPE_E*/
  char name[32]; /*<  Stream name.*/
  char uri[160]; /*<  Video stream URI (TCP or RTSP URI ground station should connect to) or port number (UDP port ground station should listen to).*/
+ uint8_t encoding; /*< Encoding of stream.*/
 } CHCNAV_CAMERA_VIDEO_STREAM_INFORMATION_STRUCT;
+
+typedef struct {
+  float framerate;       /*< [Hz] Frame rate*/
+  uint32_t bitrate;      /*< [bits/s] Bit rate*/
+  uint16_t flags;        /*<  Bitmap of stream status flags*/
+  uint16_t resolution_h; /*< [pix] Horizontal resolution*/
+  uint16_t resolution_v; /*< [pix] Vertical resolution*/
+  uint16_t rotation;     /*< [deg] Video image rotation clockwise*/
+  uint16_t hfov;         /*< [deg] Horizontal Field of view*/
+  uint8_t stream_id; /*<  Video Stream ID (1 for first, 2 for second, etc.)*/
+} CHCNAV_CAMERA_VIDEO_STREAM_STATUS_STRUCT;
+
+typedef struct {
+ float zoom; /*< Current zoom value. */
+ float zoom_max; /*< The maximum zoom value supported by the camera. */
+ uint8_t camera_type; /*< Camera type,1:long focus 2:wide angle 3:infrared. */
+} CHCNAV_CAMERA_ZOOM_CONFIGURE_STRUCT;
+
+typedef struct {
+ float focus; /*< Current focus value. */
+ float focus_min; /*< The minimum focus value supported by the camera. default is 0 */
+ float focus_max; /*< The maximum focus value supported by the camera. default is 100 */
+ uint8_t camera_type; /*< Camera type,1:long focus 2:wide angle 3:infrared. */
+} CHCNAV_CAMERA_FOCUS_CONFIGURE_STRUCT;
+
+typedef struct {
+ uint8_t osd_enable; /*< OSD enable*/
+ uint8_t pitch_yaw_enable; /*<  pitch and yaw display enable */
+ uint8_t center_cross_enable; /*<  center cross display enable*/
+ uint8_t time_enable; /*<  time display enable */
+ uint8_t range_enable; /*<  laser range display enable*/
+ uint8_t gps_coordinates; /*<  gps coordinates display enble*/
+ uint8_t temperature_enable; /*<  temperature display enable*/
+} CHCNAV_CAMERA_OSD_CONFIGURE_STRUCT;
 
 /**
  * @brief Camera common handler.
@@ -513,7 +539,19 @@ typedef struct {
    * @param video_stream_info: camera video stream information.
    * @return Execution result.
    */
-  chcnav_return_code_t (*get_video_stream_information)(uint8_t stream_id,CHCNAV_CAMERA_VIDEO_STREAM_INFORMATION_STRUCT *video_stream_info);
+  chcnav_return_code_t (*get_video_stream_information)(
+      uint8_t stream_id,
+      CHCNAV_CAMERA_VIDEO_STREAM_INFORMATION_STRUCT *video_stream_info);
+
+  /**
+   * @brief Callback function used to get camera video stream status.
+   * @param stream_id camera video stream id
+   * @param video_stream_info: camera video stream status.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*get_video_stream_status)(
+      uint8_t stream_id,
+      CHCNAV_CAMERA_VIDEO_STREAM_STATUS_STRUCT *video_stream_status);
 
   /**
    * @brief Callback function used to start record video.
@@ -556,34 +594,6 @@ typedef struct {
  * that will block chcnav root thread
  */
 typedef struct {
-  /**
-   * @brief Used to set camera focus mode.
-   * @param mode: Camera focus mode.
-   * @return Execution result.
-   */
-  chcnav_return_code_t (*set_focus_mode)(CHCNAV_CAMERA_FOCUS_MODE_E mode);
-
-  /**
-   * @brief Used to get camera current focus mode.
-   * @param mode: Pointer used to store camera focus mode.
-   * @return Execution result.
-   */
-  chcnav_return_code_t (*get_focus_mode)(CHCNAV_CAMERA_FOCUS_MODE_E *mode);
-
-  /**
-   * @brief Used to set camera zoom mode.
-   * @param mode: Camera zoom mode.
-   * @return Execution result.
-   */
-  chcnav_return_code_t (*set_zoom_mode)(CHCNAV_CAMERA_ZOOM_MODE_E mode);
-
-  /**
-   * @brief Used to get camera zoom mode.
-   * @param mode: Camera zoom mode.
-   * @return Execution result.
-   */
-  chcnav_return_code_t (*get_zoom_mode)(CHCNAV_CAMERA_ZOOM_MODE_E *mode);
-
   /**
    * @brief Used to set camera exposure mode.
    * @param mode: Camera exposure mode.
@@ -848,7 +858,7 @@ typedef struct {
    * @param second_source: Secondary Source. If non-zero the second source will be displayed as picture-in-picture.
    * @return Execution result.
    */
-  chcnav_return_code_t (*set_camera_source)(uint8_t device_id,CHCNAV_CAMERA_SOURCE_E primary_source,CHCNAV_CAMERA_SOURCE_E second_source);
+  chcnav_return_code_t (*set_camera_source)(uint8_t device_id, CHCNAV_CAMERA_VIDEO_STREAM_SOURCE_TYPE_E video_stream_source);
 
   /**
    * @brief Used to initiate the camera tracking.
@@ -874,22 +884,105 @@ typedef struct {
   chcnav_return_code_t (*get_camera_ir_mode) (CHCNAV_CAMERA_IR_MODE_E *mode);
   /**
    * @brief Used to set stream osd mode.
-   * @param mode: Stream osd mode,defined in enum CHCNAV_STREAM_OSD_MODE_E
+   * @param osd_config: Stream osd mode,defined in enum CHCNAV_CAMERA_OSD_CONFIGURE_STRUCT
    * @return Execution result.
    */
-  chcnav_return_code_t (*set_stream_osd) (CHCNAV_STREAM_OSD_MODE_E mode);
+  chcnav_return_code_t (*set_stream_osd) (CHCNAV_CAMERA_OSD_CONFIGURE_STRUCT osd_config);
   /**
    * @brief Used to get stream osd mode.
-   * @param mode: Stream osd mode,defined in enum CHCNAV_STREAM_OSD_MODE_E
+   * @param osd_config: Stream osd mode,defined in enum CHCNAV_CAMERA_OSD_CONFIGURE_STRUCT
    * @return Execution result.
    */
-  chcnav_return_code_t (*get_stream_osd) (CHCNAV_STREAM_OSD_MODE_E *mode);
+  chcnav_return_code_t (*get_stream_osd) (CHCNAV_CAMERA_OSD_CONFIGURE_STRUCT *osd_config);
+  /**
+   * @brief Used to get support ISO list.
+   * @param count: Support the number of configurable ISO parameters, Up to 63 parameters can be set.
+   * @param capability: Support the number of configurable ISO lists
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*get_camera_iso_list) (uint16_t *count, uint16_t *capability);
+  /**
+   * @brief Used to get support shutter list.
+   * @param count: Support the number of configurable ISO parameters, Up to 63 parameters can be set.
+   * @param capability: Support the number of configurable shutter lists
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*get_camera_shutter_list) (uint16_t *count, uint16_t *capability);
+  /**
+   * @brief Used to get support infrared camera color mode list.
+   * @param count: Support the number of configurable color mode parameters, Up to 63 parameters can be set.
+   * @param capability: Support the number of configurable color mode lists
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*get_camera_ir_color_list) (uint16_t *count, uint16_t *capability);
 } CHCNAV_CAMERA_PARAMETER_HANDLER_STRUCT;
+
+/**
+ * @brief Camera zoom handler.
+ * @warning Can not execute blocking functions in callback function, because
+ * that will block chcnav root thread
+ */
+typedef struct {
+  /**
+   * @brief Get camera zoom config.
+   * @param zoom_config: zoom config.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*get_camera_zoom_configure)(CHCNAV_CAMERA_ZOOM_CONFIGURE_STRUCT* zoom_config);
+  /**
+   * @brief Zoom one step increment,Enlarge or reduce by 0.1 times according to the direction.
+   * @param direction: zoom state.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*camera_zoom_step)(CHCNAV_CAMERA_ZOOM_DIRECTION_E direction);
+  /**
+   * @brief Start continuous normalized zoom in/out rate until stopped.
+   * @param direction: zoom state.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*camera_continuous_zoom_start)(CHCNAV_CAMERA_ZOOM_DIRECTION_E direction);
+  /**
+   * @brief Stop continuous normalized zoom in/out rate.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*camera_continuous_zoom_stop)();
+  /**
+   * @brief Multiply according to the numerical value.
+   * @param factor: zoom value.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*camera_zoom_by_value)(float factor);
+} CHCNAV_CAMERA_ZOOM_HANDLER_STRUCT;
+
+/**
+ * @brief Camera focus handler.
+ * @warning Can not execute blocking functions in callback function, because
+ * that will block chcnav root thread
+ */
+typedef struct {
+  /**
+   * @brief Get camera focus config.
+   * @param focus_config: focus config.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*get_camera_focus_configure)(CHCNAV_CAMERA_FOCUS_CONFIGURE_STRUCT* focus_configs);
+  /**
+   * @brief Focus value as proportion of full camera focus range.
+   * @param value: focus value, value range:0~100.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*camera_manual_focus)(float value);
+  /**
+   * @brief Continuous auto focus.
+   * @return Execution result.
+   */
+  chcnav_return_code_t (*camera_auto_continuous_focus)();
+} CHCNAV_CAMERA_FOCUS_HANDLER_STRUCT;
 
 /**
  * @brief Initialize the payload camera module.
  * @note The interface is the total initialization interface of the camera
- * module.
+ * module.After registering all callback functions, call the initialization interface.
  * @return Execution result.
  */
 chcnav_return_code_t chcnav_payload_camera_init();
@@ -916,6 +1009,30 @@ chcnav_return_code_t chcnav_payload_camera_register_common_handler(
  */
 chcnav_return_code_t chcnav_payload_camera_register_parameter_handler(
     const CHCNAV_CAMERA_PARAMETER_HANDLER_STRUCT *camera_parameter_handler);
+
+/**
+ * @brief Register the handler for camera zoom function
+ * interfaces.
+ * @note Registration of this interface needs to be after
+ * chcnav_payload_camera_init.
+ * @param camera_parameter_handler: Pointer to the handler for payload camera
+ * zoom functions.
+ * @return Execution result.
+ */
+chcnav_return_code_t chcnav_camera_zoom_handler(
+    const CHCNAV_CAMERA_ZOOM_HANDLER_STRUCT *camera_zoom_handler);
+
+/**
+ * @brief Register the handler for camera focus function
+ * interfaces.
+ * @note Registration of this interface needs to be after
+ * chcnav_payload_camera_init.
+ * @param camera_parameter_handler: Pointer to the handler for payload camera
+ * focus functions.
+ * @return Execution result.
+ */
+chcnav_return_code_t chcnav_camera_focus_handler(
+    const CHCNAV_CAMERA_FOCUS_HANDLER_STRUCT *camera_focus_handler);
 
 /**
  * @brief Used to get camera video stream network address.

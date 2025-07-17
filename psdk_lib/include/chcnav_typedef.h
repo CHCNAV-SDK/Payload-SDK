@@ -90,6 +90,13 @@ typedef enum {
 } CHCNAV_CAMERA_E;
 
 typedef enum {
+  CHCNAV_CAMERA_TYPE_ALL = 0,        /* All of camera. */
+  CHCNAV_CAMERA_TYPE_TELEPHOTO = 1,  /* Telephoto camera. */
+  CHCNAV_CAMERA_TYPE_WIDE_ANGLE = 2, /* wide angle camera. */
+  CHCNAV_CAMERA_TYPE_INFRARED = 3,   /* infrared camera. */
+} CHCNAV_CAMERA_TYPE_E;
+
+typedef enum {
   CHCNAV_DOWNLOAD_FILE_TYPE_ORG = 0, /* Media sub file origin data type. */
   CHCNAV_DOWNLOAD_FILE_TYPE_IMU = 27 /* Media sub file IMU data type.  */
 } CHCNAV_DOWNLOAD_FILE_SUB_TYPE_E;
@@ -141,9 +148,10 @@ typedef enum {
 
 
 typedef enum {
-    CHCNAV_GIMBAL_MODE_LOCK                        = 0, /* Lock mode, fix gimbal attitude in the ground coordinate, ignoring movement of aircraft. */
+    CHCNAV_GIMBAL_MODE_FREE                        = 0, /* Free mode, can control pitch/yaw/roll angle. */
     CHCNAV_GIMBAL_MODE_FPV                         = 1, /* FPV (First Person View) mode, only control roll and yaw angle of gimbal in the ground coordinate to follow aircraft. */
     CHCNAV_GIMBAL_MODE_YAW_FOLLOW                  = 2, /* Yaw follow mode, only control yaw angle of gimbal in the ground coordinate to follow aircraft. */
+    CHCNAV_GIMBAL_MODE_LOCK                        = 3, /* Lock mode, fix gimbal attitude in the ground coordinate, ignoring movement of aircraft. */
 } CHCNAV_GIMBAL_MODE_E;
 
 /**

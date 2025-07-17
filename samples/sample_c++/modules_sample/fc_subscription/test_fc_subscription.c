@@ -74,20 +74,23 @@ void chcnav_run_fc_subscription_sample()
     }
 
     ret = chcnav_fc_subscription_subscribe_topic(CHCNAV_FC_SUBSCRIPTION_TOPIC_GPS_POSITION,
-                                CHCNAV_SUBSCRIPTION_TOPIC_1_HZ, test_fc_subscription_gps_pos_cb);
+                                CHCNAV_SUBSCRIPTION_TOPIC_10_HZ, test_fc_subscription_gps_pos_cb);
     if (ret != CHCNAV_RETURN_OK)
     {
         printf("subscription velocity gps position failed\n");
     }
 
     ret = chcnav_fc_subscription_subscribe_topic(CHCNAV_FC_SUBSCRIPTION_TOPIC_ATTITUDE,
-                                CHCNAV_SUBSCRIPTION_TOPIC_1_HZ, test_fc_subscription_attitude_cb);
+                                CHCNAV_SUBSCRIPTION_TOPIC_10_HZ, test_fc_subscription_attitude_cb);
     if (ret != CHCNAV_RETURN_OK)
     {
         printf("subscription velocity topic failed\n");
     }
+}
 
-    osal_handler->task_sleep_ms(10 * 1000);
+void chcnav_stop_fc_subscription_sample()
+{
+    CHCNAV_OSAL_HANDLER_STRUCT *osal_handler = chcnav_platform_get_osal_handler();
 
     //chcnav_fc_subscription_unsubscribe_topic(CHCNAV_FC_SUBSCRIPTION_TOPIC_VELOCITY);
     chcnav_fc_subscription_unsubscribe_topic(CHCNAV_FC_SUBSCRIPTION_TOPIC_POSITION_FUSED);
