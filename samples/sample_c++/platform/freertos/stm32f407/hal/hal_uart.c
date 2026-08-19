@@ -8,7 +8,9 @@
  * @brief This is the header file for "hal_uart.c".
  ********************************************************************************/
 #include "hal_uart.h"
+#include "osal.h"
 #include "stm32f4xx_hal.h"
+#include <stdlib.h>
 
 #include "../Drivers/BSP/usart.h"
 
@@ -20,7 +22,6 @@ chcnav_return_code_t hal_uart_init(CHCNAV_HAL_UART_NUM_E uart_num, uint32_t baud
                                    chcnav_uart_handle_t *uart_handle)
 {
 	UartHandleStruct *uart;
-	//uart = pvPortMalloc(sizeof(UartHandleStruct));
 	uart = malloc(sizeof(UartHandleStruct));
     if (uart == NULL)
     {
@@ -29,11 +30,12 @@ chcnav_return_code_t hal_uart_init(CHCNAV_HAL_UART_NUM_E uart_num, uint32_t baud
 
     if (uart_num == CHCNAV_HAL_UART_NUM_1)
     {
-    	MX_USART1_UART_Init(baud_rate);
+    	MX_USART2_UART_Init(baud_rate);
     	uart->uart_num = uart_num;
     }
     else
     {
+    	free(uart);
     	return CHCNAV_RETURN_ERR_PARAM;
     }
 
@@ -48,7 +50,6 @@ chcnav_return_code_t hal_uart_deinit(chcnav_uart_handle_t uart_handle)
 	if (uart == NULL)
 		return CHCNAV_RETURN_ERR_PARAM;
 
-    //vPortFree(uart);
 	free(uart);
     return CHCNAV_RETURN_OK;
 }
@@ -63,7 +64,9 @@ chcnav_return_code_t hal_uart_write_data(chcnav_uart_handle_t uart_handle,
 
 	if (uart->uart_num == CHCNAV_HAL_UART_NUM_1)
 	{
-		MX_USART1_UART_Send(buffer, len, 0xFFFF);
+		MX_USART2_UART_Send(buffer, (uint16_t)len, 0xFFFF);
+		if (real_len != NULL)
+			*real_len = len;
 	}
 
     return CHCNAV_RETURN_OK;
@@ -77,7 +80,7 @@ chcnav_return_code_t hal_uart_read_data(chcnav_uart_handle_t uart_handle, uint8_
 
     if (uart->uart_num == CHCNAV_HAL_UART_NUM_1)
     {
-    	*real_len = MX_USART1_UART_Receive(buffer, len);
+    	*real_len = MX_USART2_UART_Receive(buffer, (uint16_t)len);
     }
     return CHCNAV_RETURN_OK;
 }
@@ -91,11 +94,12 @@ chcnav_return_code_t hal_uart_read_data_timeout(chcnav_uart_handle_t uart_handle
 
 	const UartHandleStruct *uart = (UartHandleStruct *) uart_handle;
 	uint64_t time_count = 0;
+	*real_len = 0;
 	while(time_count <= timeout)
 	{
 		if (uart->uart_num == CHCNAV_HAL_UART_NUM_1)
 		{
-			*real_len = MX_USART1_UART_Receive(buffer, len);
+			*real_len = MX_USART2_UART_Receive(buffer, (uint16_t)len);
 		}
 		if (*real_len > 0)
 		{
@@ -112,7 +116,7 @@ chcnav_return_code_t hal_uart_get_status(CHCNAV_HAL_UART_NUM_E uart_num, CHCNAV_
 {
 	if (uart_num == CHCNAV_HAL_UART_NUM_1)
 		status->is_connect = true;
-	else if (uart_num == CHCNAV_HAL_UART_NUM_1)
+	else
 		status->is_connect = false;
 
 	return CHCNAV_RETURN_OK;

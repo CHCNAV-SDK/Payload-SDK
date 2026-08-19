@@ -1,4 +1,5 @@
 #include "test_flight_control.h"
+#include "chcnav_logger.h"
 #include "chcnav_flight_controller.h"
 #include <iostream>
 
@@ -6,7 +7,7 @@ chcnav_return_code_t chcnav_run_flight_control_sample(CHCNAV_TEST_FLIGHT_CONTROL
     chcnav_return_code_t ret = -1;
     ret = chcnav_flight_controller_init();
     if (ret != CHCNAV_RESULT_SUCCESS) {
-        std::cout << "chcnav_payload_camera_init failed" << std::endl;
+        CHCNAV_LOG_ERROR(demo, "chcnav_payload_camera_init failed");
         return ret;
     }
 

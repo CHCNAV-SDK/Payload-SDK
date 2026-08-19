@@ -1,0 +1,28 @@
+{
+    "user_app_id": "100005",
+    "firmware_version": "01.00.00",
+    "is_ai_rendering": "false",
+    "platform": "Insight Box",
+    "name":{
+        "name_cn": "火眼测试demo",
+        "name_en": "psdk-on-box-demo"
+    },
+    "description": {
+        "description_cn": [
+            "本应用实现在火眼扩展载荷3口上控制云台设备姿态"
+        ],
+        "description_en": [
+            "The application is used to control the attitude of the gimbal device on the Insight Box extended payload Port 3"
+        ]
+    },
+    "maintainer": {
+        "maintainer_cn": "上海华测导航技术股份有限公司",
+        "maintainer_en": "Shanghai Huace Navigation Technology Ltd"
+    },
+    "ver_min": "00.00.00",
+    "ver_max": "99.99.99",
+    "bin": "../../../../../../psdk_lib/bin/psdk_demo_on_box",
+    "userconfig": [
+        "../../../../../../samples"
+    ]
+}

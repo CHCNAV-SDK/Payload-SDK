@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 3.4.1)
+project(psdk_demo_on_box CXX)
+set(CMAKE_CXX_FLAGS "-std=c++11 -pthread")
+set(CMAKE_EXE_LINKER_FLAGS "-pthread")
+
+if (NOT USE_SYSTEM_ARCH)
+    add_definitions(-DSYSTEM_ARCH_LINUX)
+endif ()
+
+file(GLOB GLOB_SRCS
+    main.cpp
+    hal/*.cpp
+    osal/*.cpp
+)
+
+
+add_executable(${PROJECT_NAME}
+        ${GLOB_SRCS})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../../../../../psdk_lib/lib/x86_64-linux-gnu-gcc/libpayloadsdk.a)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../../../../../psdk_lib/include)
+
+set_target_properties( ${PROJECT_NAME}
+   PROPERTIES
+   OUTPUT_NAME               ${PROJECT_NAME}
+   RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_INSTALL_BIN_RPATH}
+)

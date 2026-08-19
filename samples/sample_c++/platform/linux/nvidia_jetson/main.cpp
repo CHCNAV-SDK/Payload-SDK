@@ -1,5 +1,6 @@
 #include "chcnav_core.h"
 #include "chcnav_error.h"
+#include "chcnav_logger.h"
 #include "hal/hal_network.h"
 #include "hal/hal_uart.h"
 #include "osal/osal.h"
@@ -10,16 +11,67 @@
 #include "test_gimbal_manager.h"
 #include "test_gimbal.h"
 #include "test_fc_subscription.h"
+#include "test_widget.h"
 #include <chrono>
+#include <cstdio>
+#include <ctime>
 #include <iostream>
 #include <signal.h>
 #include <string>
+#include <sys/stat.h>
 #include <thread>
+#include <unistd.h>
+
 bool g_stop = false;
+static FILE *g_log_file = nullptr;
 
 void signal_handler(int signal) {
   (void)signal;
   g_stop = true;
+}
+
+static chcnav_return_code_t user_print_console(const uint8_t *data, uint16_t data_len)
+{
+  if (data == nullptr || data_len == 0) {
+    return CHCNAV_RETURN_ERR_PARAM;
+  }
+  (void)fwrite(data, 1, data_len, stdout);
+  (void)fflush(stdout);
+  return CHCNAV_RETURN_OK;
+}
+
+static chcnav_return_code_t user_file_console(const uint8_t *data, uint16_t data_len)
+{
+  if (data == nullptr || data_len == 0 || g_log_file == nullptr) {
+    return CHCNAV_RETURN_ERR_PARAM;
+  }
+  size_t written = fwrite(data, 1, data_len, g_log_file);
+  (void)fflush(g_log_file);
+  return (written == data_len) ? CHCNAV_RETURN_OK : CHCNAV_RETURN_ERR_SYSTEM;
+}
+
+static chcnav_return_code_t user_log_file_init(const char *folder)
+{
+  char path[256];
+  time_t now = time(nullptr);
+  struct tm *lt = localtime(&now);
+
+  if (folder == nullptr || lt == nullptr) {
+    return CHCNAV_RETURN_ERR_PARAM;
+  }
+  if (access(folder, F_OK) != 0) {
+    if (mkdir(folder, 0755) != 0) {
+      return CHCNAV_RETURN_ERR_SYSTEM;
+    }
+  }
+  snprintf(path, sizeof(path), "%s/psdk_%04d%02d%02d_%02d-%02d-%02d.log", folder,
+           lt->tm_year + 1900, lt->tm_mon + 1, lt->tm_mday, lt->tm_hour, lt->tm_min,
+           lt->tm_sec);
+  g_log_file = fopen(path, "wb+");
+  if (g_log_file == nullptr) {
+    return CHCNAV_RETURN_ERR_SYSTEM;
+  }
+  return CHCNAV_RETURN_OK;
 }
 
 chcnav_return_code_t prepare_environment() {
@@ -70,28 +122,55 @@ chcnav_return_code_t prepare_environment() {
       .file_rename = osal_file_rename,
       .file_stat = osal_file_stat};
 
+  CHCNAV_LOGGER_CONSOLE_STRUCT print_console = {
+      .func = user_print_console,
+      .console_level = CHCNAV_LOGGER_CONSOLE_LOG_LEVEL_INFO,
+  };
+  CHCNAV_LOGGER_CONSOLE_STRUCT file_console = {
+      .func = user_file_console,
+      .console_level = CHCNAV_LOGGER_CONSOLE_LOG_LEVEL_INFO,
+  };
+
   ret = chcnav_platform_reg_osal_handler(&osal_handler_struct);
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "Register osal handler failed" << std::endl;
+    printf("Register osal handler failed\n");
     return CHCNAV_RETURN_ERR_SYSTEM;
   }
 
   ret = chcnav_platform_reg_hal_uart_handler(&hal_uart_handler_struct);
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "Register hal uart handler failed" << std::endl;
+    printf("Register hal uart handler failed\n");
     return CHCNAV_RETURN_ERR_SYSTEM;
   }
 
   ret = chcnav_platform_reg_hal_network_handler(&hal_network_handler_struct);
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "Register hal uart network failed" << std::endl;
+    printf("Register hal network handler failed\n");
     return CHCNAV_RETURN_ERR_SYSTEM;
   }
 
   ret =
       chcnav_platform_reg_file_system_handler(&osal_file_system_handler_struct);
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "Register osal file system failed" << std::endl;
+    printf("Register osal file system failed\n");
+    return CHCNAV_RETURN_ERR_SYSTEM;
+  }
+
+  ret = user_log_file_init("psdk_logs");
+  if (ret != CHCNAV_RETURN_OK) {
+    printf("Init log file failed\n");
+    return CHCNAV_RETURN_ERR_SYSTEM;
+  }
+
+  ret = chcnav_logger_add_console(&print_console);
+  if (ret != CHCNAV_RETURN_OK) {
+    printf("Add print logger console failed\n");
+    return CHCNAV_RETURN_ERR_SYSTEM;
+  }
+
+  ret = chcnav_logger_add_console(&file_console);
+  if (ret != CHCNAV_RETURN_OK) {
+    printf("Add file logger console failed\n");
     return CHCNAV_RETURN_ERR_SYSTEM;
   }
 
@@ -107,12 +186,12 @@ int main(int argc, char *argv[]) {
 
   ret = prepare_environment();
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "prepare environment failed" << std::endl;
+    printf("prepare environment failed");
     return CHCNAV_RETURN_ERR_SYSTEM;
   }
   ret = chcnav_core_init();
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "chcnav_core_init failed" << std::endl;
+    CHCNAV_LOG_ERROR(demo, "chcnav_core_init failed");
     return CHCNAV_RETURN_ERR_SYSTEM;
   }
 
@@ -135,23 +214,30 @@ int main(int argc, char *argv[]) {
                  "                                           |\n"
               << std::endl;
 
-    std::cin >> moduleStr;
+    if (!(std::cin >> moduleStr)) {
+      goto EXIT;
+    }
     switch (moduleStr) {
     case 'q':
-      std::cout << "Quit..." << std::endl;
+      printf("Quit...\n");
       goto EXIT;
     case '0': {
       char inputStr;
       chcnav_test_gimbal_start();
       chcnav_run_payload_camera_sample();
       chcnav_run_fc_subscription_sample();
-      std::cout << "input \'q\' to exit multi module hybrid test program" << std::endl;
-      std::cin >> inputStr;
-      if (inputStr == 'q')
-      {
-        chcnav_test_gimbal_stop();
-        chcnav_stop_payload_camera_sample();
-        chcnav_stop_fc_subscription_sample();
+      if (chcnav_test_widget_start() != CHCNAV_RETURN_OK) {
+        CHCNAV_LOG_WARN(demo, "chcnav_test_widget_start failed (continuing hybrid test)");
+      }
+      printf("input \'q\' to exit multi module hybrid test program\n");
+      while (std::cin >> inputStr && inputStr != 'q') {
+      }
+      chcnav_test_widget_stop();
+      chcnav_test_gimbal_stop();
+      chcnav_stop_payload_camera_sample();
+      chcnav_stop_fc_subscription_sample();
+      if (!std::cin) {
+        goto EXIT;
       }
       break;
     }
@@ -161,7 +247,7 @@ int main(int argc, char *argv[]) {
     case 'b': {
       char inputStr;
       chcnav_run_payload_camera_sample();
-      std::cout << "input \'q\' to exit test  payload camera program" << std::endl;
+      printf("input \'q\' to exit test  payload camera program\n");
       std::cin >> inputStr;
       if (inputStr == 'q')
       {
@@ -177,18 +263,17 @@ int main(int argc, char *argv[]) {
     case 'd': {
       char inputStr;
       ret = chcnav_test_gimbal_start();
-      std::cout << "chcnav_test_gimbal_start ret :" << ret << std::endl;
       if (ret != CHCNAV_RETURN_OK) {
-        std::cout << "chcnav_test_gimbal_start failed" << std::endl;
+        CHCNAV_LOG_ERROR(demo, "chcnav_test_gimbal_start failed");
         goto EXIT;
       }
 
       ret = chcnav_core_start();
       if (ret != CHCNAV_RETURN_OK) {
-        std::cout << "chcnav_core_start failed" << std::endl;
+        CHCNAV_LOG_ERROR(demo, "chcnav_core_start failed");
         goto EXIT;
       }
-      std::cout << "input \'q\' to exit gimbal test program" << std::endl;
+      printf("input \'q\' to exit gimbal test program\n");
       std::cin >> inputStr;
       if (inputStr == 'q')
       {
@@ -197,13 +282,13 @@ int main(int argc, char *argv[]) {
       break;
     }
     default:
-      std::cout << "invalid input" << std::endl;
+      CHCNAV_LOG_ERROR(demo, "invalid input");
       break;
     }
   }
 
 EXIT:
   chcnav_core_deinit();
-  std::cout << "chcnav psdk end" << std::endl;
+  CHCNAV_LOG_INFO(demo, "chcnav psdk end");
   return 0;
 }

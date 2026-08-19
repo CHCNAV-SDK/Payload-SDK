@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-#define CHCNAV_PI (3.14159265358979323846f)
+#define CHCNAV_PI (3.14159265358979323846)
 #define CHCNAV_FILE_NAME_SIZE_MAX 256
 #define CHCNAV_FILE_PATH_SIZE_MAX (CHCNAV_FILE_NAME_SIZE_MAX + 256)
 #define CHCNAV_IP_ADDR_STRING_SIZE_MAX 15
@@ -68,9 +68,10 @@ typedef enum {
   CHCNAV_MOUNT_POSITION_UNKNOWN = 0,
   CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO1 = 1,
   CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO2 = 2,
-  CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO3 = 3,
-  CHCNAV_MOUNT_POSITION_EXTENSION_PORT = 4,
-  CHCNAV_MOUNT_POSITION_EXTENSION_LITE_PORT = 5
+  CHCNAV_MOUNT_POSITION_EXTENSION_PORT1 = 3,
+  CHCNAV_MOUNT_POSITION_EXTENSION_PORT2 = 4,
+  CHCNAV_MOUNT_POSITION_EXTENSION_PORT3 = 5,
+  CHCNAV_MOUNT_POSITION_EXTENSION_PORT4 = 6,
 } CHCNAV_MOUNT_POSITION_E;
 
 typedef enum {
@@ -163,6 +164,16 @@ typedef enum {
     CHCNAV_SUBSCRIPTION_TOPIC_50_HZ           = 50,
     CHCNAV_SUBSCRIPTION_TOPIC_100_HZ          = 100,
 } CHCNAV_SUBSCRIPTION_TOPIC_FREQ_E;
+
+/**
+ * @brief Mobile app language type.
+ * @note Used for widget UI configuration, HMS text, etc. to support multi-language.
+ */
+typedef enum {
+    CHCNAV_MOBILE_APP_LANGUAGE_ENGLISH         = 0,   /*!< The system language of the mobile app is English. */
+    CHCNAV_MOBILE_APP_LANGUAGE_CHINESE         = 1,   /*!< The system language of the mobile app is Chinese. */
+    CHCNAV_MOBILE_APP_LANGUAGE_UNKNOWN         = 255, /*!< The system language of the mobile app is unknown. */
+} CHCNAV_MOBILE_APP_LANGUAGE_E;
 
 typedef struct {
   chcnav_f32_t focus_x; /* Specifies the horizontal coordinate within the

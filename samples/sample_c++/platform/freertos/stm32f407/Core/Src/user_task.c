@@ -9,10 +9,27 @@
  ********************************************************************************/
 #include "user_task.h"
 #include <stdio.h>
+#include "chcnav_core.h"
+#include "chcnav_error.h"
+#include "chcnav_logger.h"
 #include "test_payload_camera.h"
 #include "test_gimbal.h"
+#include "test_widget.h"
+#include "test_fc_subscription.h"
 #include "hal_uart.h"
 #include "osal.h"
+#include "usart.h"
+
+static chcnav_return_code_t user_usart1_console(const uint8_t *data, uint16_t data_len)
+{
+	if (data == NULL || data_len == 0) {
+		return CHCNAV_RETURN_ERR_PARAM;
+	}
+	if (MX_USART1_UART_Send(data, data_len, 1000) != HAL_OK) {
+		return CHCNAV_RETURN_ERR_SYSTEM;
+	}
+	return CHCNAV_RETURN_OK;
+}
 
 void chcnav_user_task(void const *argument)
 {
@@ -43,6 +60,11 @@ void chcnav_user_task(void const *argument)
 		.uart_read_data_timeout = hal_uart_read_data_timeout,
 		.uart_get_status = hal_uart_get_status};
 
+	CHCNAV_LOGGER_CONSOLE_STRUCT usart1_console = {
+		.func = user_usart1_console,
+		.console_level = CHCNAV_LOGGER_CONSOLE_LOG_LEVEL_INFO,
+	};
+
 	ret = chcnav_platform_reg_osal_handler(&osal_handler_struct);
 	if (ret != CHCNAV_RETURN_OK) {
 		printf("Register osal handler failed\n");
@@ -55,15 +77,25 @@ void chcnav_user_task(void const *argument)
 		goto out;
 	}
 
+	ret = chcnav_logger_add_console(&usart1_console);
+	if (ret != CHCNAV_RETURN_OK) {
+		printf("Add USART1 logger console failed\n");
+		goto out;
+	}
+
 	ret = chcnav_core_init();
 	if (ret != CHCNAV_RETURN_OK) {
-		printf("chcnav_core_init failed\n");
+		CHCNAV_LOG_ERROR(demo, "chcnav_core_init failed");
 		goto out;
 	}
 
 	chcnav_run_payload_camera_sample();
 
 	chcnav_test_gimbal_start();
+
+	chcnav_test_widget_start();
+
+	chcnav_run_fc_subscription_sample();
 
 	ret = chcnav_core_start();
 		if (ret != CHCNAV_RETURN_OK) {

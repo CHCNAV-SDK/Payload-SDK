@@ -3,7 +3,7 @@
 
 #include "chcnav_camera_manager.h"
 #include "chcnav_typedef.h"
-#include "chcnav_hlog.h"
+#include "chcnav_logger.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

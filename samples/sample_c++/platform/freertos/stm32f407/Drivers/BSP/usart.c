@@ -34,13 +34,16 @@ UART_HandleTypeDef huart2;
 #endif
 PUTCHAR_PROTOTYPE
 {
-    HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
     return ch;
 }
 #endif
-#define UART1_READ_BUF_SIZE      512
-#define RXBUFFERSIZE    		 512                       /* 缓存大小 */
-static uint8_t g_rx_buffer[RXBUFFERSIZE];                  /* HAL库使用的串口接收缓冲 */
+
+#define UART_MAV_READ_BUF_SIZE   1024
+#define RXBUFFERSIZE             1024
+static uint8_t g_mav_rx_dma_buf[2][RXBUFFERSIZE];
+static volatile uint8_t g_mav_rx_dma_idx;
+static volatile uint16_t g_mav_rx_dma_committed;
 /* USER CODE END 0 */
 
 DMA_HandleTypeDef hdma_usart1_rx;
@@ -48,18 +51,14 @@ DMA_HandleTypeDef hdma_usart1_tx;
 DMA_HandleTypeDef hdma_usart2_rx;
 DMA_HandleTypeDef hdma_usart2_tx;
 
-static RingBufferStruct uart1_ring_buf;
-
-static chcnav_mutex_handle_t uart1_mutex;
-
-static uint8_t uart1_read_buf[UART1_READ_BUF_SIZE];
-/* USART1 init function */
+static RingBufferStruct uart_mav_ring_buf;
+static uint8_t uart_mav_read_buf[UART_MAV_READ_BUF_SIZE];
 
 void MX_USART1_UART_Init(uint32_t baud_rate)
 {
 
   /* USER CODE BEGIN USART1_Init 0 */
-  chcnav_ring_buf_init(&uart1_ring_buf, uart1_read_buf, UART1_READ_BUF_SIZE);
+
   /* USER CODE END USART1_Init 0 */
 
   /* USER CODE BEGIN USART1_Init 1 */
@@ -77,15 +76,12 @@ void MX_USART1_UART_Init(uint32_t baud_rate)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN USART1_Init 2 */
-  HAL_UARTEx_ReceiveToIdle_DMA(&huart1, (uint8_t *)g_rx_buffer, RXBUFFERSIZE);
-  osal_mutex_create(&uart1_mutex);
-  /* USER CODE END USART1_Init 2 */
-
+  /* No ReceiveToIdle_DMA — console does not use DMA RX */
 }
 
-void MX_USART2_UART_Init(void)
+void MX_USART2_UART_Init(uint32_t baud_rate)
 {
+  chcnav_ring_buf_init(&uart_mav_ring_buf, uart_mav_read_buf, UART_MAV_READ_BUF_SIZE);
 
   /* USER CODE BEGIN USART2_Init 0 */
 
@@ -95,7 +91,7 @@ void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = baud_rate;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -108,8 +104,9 @@ void MX_USART2_UART_Init(void)
   }
   /* USER CODE BEGIN USART2_Init 2 */
 
-  /* USER CODE END USART2_Init 2 */
-
+  g_mav_rx_dma_idx = 0;
+  g_mav_rx_dma_committed = 0;
+  HAL_UARTEx_ReceiveToIdle_DMA(&huart2, g_mav_rx_dma_buf[0], RXBUFFERSIZE);
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
@@ -307,47 +304,74 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-/**
- * @brief       Rx传输回调函数
- * @param       huart: UART句柄类型指针
- * @retval      无
- */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    if(huart->Instance == USART1)
-    {
-    }
+    (void)huart;
+}
+
+static void mav_uart2_rx_commit(const uint8_t *data, uint16_t len)
+{
+	if (len == 0U)
+		return;
+	if (chcnav_ring_uf_get_nused_size(&uart_mav_ring_buf) >= len)
+		chcnav_ring_buf_put(&uart_mav_ring_buf, data, len);
+}
+
+static void mav_uart2_rx_restart_peer(void)
+{
+	g_mav_rx_dma_idx ^= 1U;
+	g_mav_rx_dma_committed = 0;
+	HAL_UARTEx_ReceiveToIdle_DMA(&huart2, g_mav_rx_dma_buf[g_mav_rx_dma_idx], RXBUFFERSIZE);
 }
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t size)
 {
-	if (huart->Instance == USART1)
+	uint8_t *buf;
+	uint16_t committed;
+	uint16_t chunk;
+
+	if (huart->Instance != USART2)
+		return;
+
+	buf = g_mav_rx_dma_buf[g_mav_rx_dma_idx];
+	committed = g_mav_rx_dma_committed;
+
+	if (huart->RxEventType == HAL_UART_RXEVENT_HT)
 	{
-		if (chcnav_ring_uf_get_nused_size(&uart1_ring_buf) >= size)
+		if (size > committed)
 		{
-			chcnav_ring_buf_put(&uart1_ring_buf, g_rx_buffer, size);
+			chunk = (uint16_t)(size - committed);
+			mav_uart2_rx_commit(buf + committed, chunk);
+			g_mav_rx_dma_committed = size;
+		}
+		return;
+	}
+
+	if (huart->RxEventType == HAL_UART_RXEVENT_IDLE ||
+	    huart->RxEventType == HAL_UART_RXEVENT_TC)
+	{
+		if (size > committed)
+		{
+			chunk = (uint16_t)(size - committed);
+			mav_uart2_rx_commit(buf + committed, chunk);
 		}
 
-		//HAL_UART_Transmit(&huart2, g_rx_buffer, size, 0xFFFF);
-		memset(g_rx_buffer, 0, RXBUFFERSIZE);
-		HAL_UARTEx_ReceiveToIdle_DMA(&huart1, (uint8_t *)g_rx_buffer, RXBUFFERSIZE);
-	}
-	else if (huart->Instance == USART2)
-	{
-
+		mav_uart2_rx_restart_peer();
 	}
 }
 
 uint32_t MX_USART1_UART_Send(const uint8_t *pdata, uint16_t size, uint32_t timeout)
 {
-	return HAL_UART_Transmit(&huart1, pdata, size, timeout);
+	return HAL_UART_Transmit(&huart1, (uint8_t *)pdata, size, timeout);
 }
 
-uint32_t MX_USART1_UART_Receive(const uint8_t *pData, uint16_t Size)
+uint32_t MX_USART2_UART_Send(const uint8_t *pdata, uint16_t size, uint32_t timeout)
 {
-	//osal_mutex_lock(uart1_mutex);
-	uint16_t ret = chcnav_ring_buf_get(&uart1_ring_buf, pData, Size);
-	//osal_mutex_unlock(uart1_mutex);
-	return ret;
+	return HAL_UART_Transmit(&huart2, (uint8_t *)pdata, size, timeout);
+}
+
+uint32_t MX_USART2_UART_Receive(const uint8_t *pData, uint16_t Size)
+{
+	return chcnav_ring_buf_get(&uart_mav_ring_buf, (uint8_t *)pData, Size);
 }
 /* USER CODE END 1 */

@@ -1,4 +1,5 @@
 #include "test_gimbal.h"
+#include "chcnav_logger.h"
 #include <iostream>
 #include <ctime>
 #include <math.h>
@@ -172,7 +173,7 @@ chcnav_return_code_t get_gimbal_attitude_compansation_mode(CHCNAV_GIMBAL_ATTITUD
 chcnav_return_code_t chcnav_test_gimbal_start() {
   chcnav_return_code_t ret = chcnav_gimbal_init();
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "gimbal init failed" << std::endl;
+    CHCNAV_LOG_ERROR(demo, "gimbal init failed");
   }
 
   CHCNAV_GIMBAL_COMMON_HANDLER_STRUCT common_handler{};
@@ -187,7 +188,7 @@ chcnav_return_code_t chcnav_test_gimbal_start() {
   common_handler.get_gimbal_attitude_compansation_mode = get_gimbal_attitude_compansation_mode;
   ret = chcnav_gimbal_register_common_handler(&common_handler);
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "gimbal register common handler failed" << std::endl;
+    CHCNAV_LOG_ERROR(demo, "gimbal register common handler failed");
   }
 
   is_test_gimbal_inited = true;

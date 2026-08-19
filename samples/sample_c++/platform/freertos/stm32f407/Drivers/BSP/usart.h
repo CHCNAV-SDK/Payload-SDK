@@ -37,11 +37,12 @@ extern "C" {
 /* USER CODE END Private defines */
 
 void MX_USART1_UART_Init(uint32_t baud_rate);
-void MX_USART2_UART_Init(void);
+void MX_USART2_UART_Init(uint32_t baud_rate);
 
 /* USER CODE BEGIN Prototypes */
 uint32_t MX_USART1_UART_Send(const uint8_t *pdata, uint16_t size, uint32_t timeout);
-uint32_t MX_USART1_UART_Receive(const uint8_t *pdata, uint16_t size);
+uint32_t MX_USART2_UART_Send(const uint8_t *pdata, uint16_t size, uint32_t timeout);
+uint32_t MX_USART2_UART_Receive(const uint8_t *pdata, uint16_t size);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
@@ -49,4 +50,3 @@ uint32_t MX_USART1_UART_Receive(const uint8_t *pdata, uint16_t size);
 #endif
 
 #endif /* __USART_H__ */
-

@@ -10,6 +10,9 @@
 #include "chcnav_error.h"
 #include "chcnav_typedef.h"
 
+static uint32_t g_local_time_ms_offset = 0;
+static uint64_t g_local_time_us_offset = 0;
+
 chcnav_return_code_t osal_task_create(const char *name,
                                       void *(*task_func)(void *),
                                       uint32_t stack_size, void *arg,
@@ -218,8 +221,18 @@ chcnav_return_code_t osal_get_time_ms(uint32_t *ms)
 {
     struct timeval time;
 
+    if (ms == nullptr) {
+        return CHCNAV_RETURN_ERR_PARAM;
+    }
+
     gettimeofday(&time, nullptr);
-    *ms = (time.tv_sec * 1000 + time.tv_usec / 1000);
+    *ms = static_cast<uint32_t>(time.tv_sec * 1000 + time.tv_usec / 1000);
+
+    if (g_local_time_ms_offset == 0) {
+        g_local_time_ms_offset = *ms;
+    } else {
+        *ms = *ms - g_local_time_ms_offset;
+    }
 
     return CHCNAV_RETURN_OK;
 }
@@ -228,8 +241,19 @@ chcnav_return_code_t osal_get_time_us(uint64_t *us)
 {
     struct timeval time;
 
+    if (us == nullptr) {
+        return CHCNAV_RETURN_ERR_PARAM;
+    }
+
     gettimeofday(&time, nullptr);
-    *us = (time.tv_sec * 1000000 + time.tv_usec);
+    *us = static_cast<uint64_t>(time.tv_sec) * 1000000ULL +
+          static_cast<uint64_t>(time.tv_usec);
+
+    if (g_local_time_us_offset == 0) {
+        g_local_time_us_offset = *us;
+    } else {
+        *us = *us - g_local_time_us_offset;
+    }
 
     return CHCNAV_RETURN_OK;
 }

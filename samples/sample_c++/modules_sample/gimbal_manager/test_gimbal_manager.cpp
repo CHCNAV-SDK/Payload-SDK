@@ -1,4 +1,5 @@
 #include "test_gimbal_manager.h"
+#include "chcnav_logger.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <iostream>
@@ -65,14 +66,14 @@ void run_gimbal_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_GIM
             ret = chcnav_gimbal_manager_set_mode(position, CHCNAV_GIMBAL_MODE_LOCK);
             if (ret != CHCNAV_RETURN_OK)
             {
-                printf("set gimbal mode to lock mdoe fialed.\n");
+                CHCNAV_LOG_ERROR(demo, "set gimbal mode to lock mdoe failed");
             }
             osal_handler->task_sleep_ms(2 * 1000);
             printf("--> Function: Set gimbal mode to FOLLOW...\n");
             ret = chcnav_gimbal_manager_set_mode(position, CHCNAV_GIMBAL_MODE_YAW_FOLLOW);
             if (ret != CHCNAV_RETURN_OK)
             {
-                printf("set gimbal mode to follow mdoe fialed.\n");
+                CHCNAV_LOG_ERROR(demo, "set gimbal mode to follow mdoe failed");
             }
             osal_handler->task_sleep_ms(2 * 1000);
             break;
@@ -83,28 +84,28 @@ void run_gimbal_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_GIM
             ret = chcnav_gimbal_manager_reset(position, CHCNAV_GIMBAL_RESET_MODE_YAW);
             if (ret != CHCNAV_RETURN_OK)
             {
-                printf("set gimbal reset mode to yaw fialed.\n");
+                CHCNAV_LOG_ERROR(demo, "set gimbal reset mode to yaw failed");
             }
             osal_handler->task_sleep_ms(2 * 1000);
             printf("--> Function: Set gimbal reset mode to YAW and PITCH downward...\n");
             ret = chcnav_gimbal_manager_reset(position, CHCNAV_GIMBAL_RESET_MODE_PITCH_DOWNWARD_UPWARD_AND_YAW);
             if (ret != CHCNAV_RETURN_OK)
             {
-                printf("set gimbal reset mode to yaw and pitch downward fialed.\n");
+                CHCNAV_LOG_ERROR(demo, "set gimbal reset mode to yaw and pitch downward failed");
             }
             osal_handler->task_sleep_ms(2 * 1000);
             printf("--> Function: Set gimbal reset mode to YAW and PITCH...\n");
             ret = chcnav_gimbal_manager_reset(position, CHCNAV_GIMBAL_RESET_MODE_PITCH_AND_YAW);
             if (ret != CHCNAV_RETURN_OK)
             {
-                printf("set gimbal reset mode to pitch and yaw fialed.\n");
+                CHCNAV_LOG_ERROR(demo, "set gimbal reset mode to pitch and yaw failed");
             }
             osal_handler->task_sleep_ms(2 * 1000);
             printf("--> Function: Set gimbal reset mode to PITCH downward...\n");
             ret = chcnav_gimbal_manager_reset(position, CHCNAV_GIMBAL_RESET_MODE_PITCH_DOWNWARD_UPWARD);
             if (ret != CHCNAV_RETURN_OK)
             {
-                printf("set gimbal reset mode to pitch downward fialed.\n");
+                CHCNAV_LOG_ERROR(demo, "set gimbal reset mode to pitch downward failed");
             }
             osal_handler->task_sleep_ms(2 * 1000);
             break;
@@ -122,7 +123,7 @@ void run_gimbal_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_GIM
                     ret = chcnav_gimbal_manager_rorate(position, rotate);
                     if (ret != CHCNAV_RETURN_OK)
                     {
-                        printf("set gimbal rotate fialed.\n");
+                        CHCNAV_LOG_ERROR(demo, "set gimbal rotate failed");
                     }
                 }
                 else if (g_rotate_list[i].action == TEST_GIMBAL_MANAGER_RESET)
@@ -131,7 +132,7 @@ void run_gimbal_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_GIM
                     ret = chcnav_gimbal_manager_reset(position, CHCNAV_GIMBAL_RESET_MODE_PITCH_AND_YAW);
                     if (ret != CHCNAV_RETURN_OK)
                     {
-                        printf("set gimbal reset mode to pitch and yaw fialed.\n");
+                        CHCNAV_LOG_ERROR(demo, "set gimbal reset mode to pitch and yaw failed");
                     }
                 }
                 osal_handler->task_sleep_ms(2 * 1000);
@@ -144,7 +145,7 @@ void run_gimbal_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_GIM
             ret = chcnav_gimbal_manager_restore_factory_settings(position);
             if (ret != CHCNAV_RETURN_OK)
             {
-                printf("set gimbal reset mode to pitch downward fialed.\n");
+                CHCNAV_LOG_ERROR(demo, "set gimbal reset mode to pitch downward failed");
             }
             osal_handler->task_sleep_ms(8 * 1000);
             printf("--> Function: gimbal factory setting done...\n");
@@ -194,7 +195,7 @@ void chcnav_run_gimbal_manager_sample()
         }
 
         gimbalMountPosition = static_cast<CHCNAV_MOUNT_POSITION_E>(atoi(mountPositionStr.c_str()));
-        if (gimbalMountPosition > CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO3 || gimbalMountPosition < CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO1) {
+        if (gimbalMountPosition > CHCNAV_MOUNT_POSITION_EXTENSION_PORT4 || gimbalMountPosition < CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO1) {
             printf("Input mount position is invalid");
             continue;
         } else {
@@ -209,14 +210,14 @@ void chcnav_run_gimbal_manager_sample()
     chcnav_return_code_t ret = chcnav_gimbal_manager_init();
     if (ret != CHCNAV_RETURN_OK)
     {
-        printf("Init gimbal manager failed, error code: %d\r\n", ret);
+        CHCNAV_LOG_ERROR(demo, "Init gimbal manager failed, error code: %d", ret);
         return;
     }
 
     while(true)
     {
         chcnav_gimbal_manager_show_sample_list();
-        std::cout << "Please input number to select sample (input q to quit): ";
+        printf("Please input number to select sample (input q to quit): ");
         std::cin >> sampleSelectStr;
 
         if (sampleSelectStr == "q") {

@@ -1,4 +1,5 @@
 #include "test_payload_camera.h"
+#include "chcnav_logger.h"
 #include "chcnav_payload_camera.h"
 #include <iostream>
 
@@ -555,8 +556,7 @@ chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
 
   ret = chcnav_payload_camera_register_common_handler(&common_handler_st);
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "chcnav_payload_camera_register_common_handler failed"
-              << std::endl;
+    CHCNAV_LOG_ERROR(demo, "chcnav_payload_camera_register_common_handler failed");
     return ret;
   }
 
@@ -607,8 +607,7 @@ chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
 
   ret = chcnav_payload_camera_register_parameter_handler(&parameter_handler_st);
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "chcnav_payload_camera_register_parameter_handler failed"
-              << std::endl;
+    CHCNAV_LOG_ERROR(demo, "chcnav_payload_camera_register_parameter_handler failed");
     return ret;
   }
 
@@ -620,7 +619,7 @@ chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
   zoom_handler_st.get_camera_zoom_configure = get_camera_zoom_configure;
   ret = chcnav_camera_zoom_handler(&zoom_handler_st);
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "chcnav_camera_zoom_handler failed" << std::endl;
+    CHCNAV_LOG_ERROR(demo, "chcnav_camera_zoom_handler failed");
     return ret;
   }
 
@@ -630,13 +629,13 @@ chcnav_return_code_t TestPayloadCamera::chcnav_test_payload_camera_start() {
   focus_handle_st.get_camera_focus_configure = get_camera_focus_configure;
   ret = chcnav_camera_focus_handler(&focus_handle_st);
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "chcnav_camera_focus_handler failed" << std::endl;
+    CHCNAV_LOG_ERROR(demo, "chcnav_camera_focus_handler failed");
     return ret;
   }
 
   ret = chcnav_payload_camera_init();
   if (ret != CHCNAV_RETURN_OK) {
-    std::cout << "chcnav_payload_camera_init failed" << std::endl;
+    CHCNAV_LOG_ERROR(demo, "chcnav_payload_camera_init failed");
     return ret;
   }
   ret = is_test_payload_camera_inited = true;

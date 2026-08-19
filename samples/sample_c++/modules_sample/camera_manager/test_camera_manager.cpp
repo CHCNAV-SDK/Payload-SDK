@@ -1,4 +1,5 @@
 #include "test_camera_manager.h"
+#include "chcnav_logger.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <iostream>
@@ -47,7 +48,7 @@ chcnav_return_code_t test_camera_manager_start_single_photo(CHCNAV_MOUNT_POSITIO
 
     ret = chcnav_camera_manager_set_mode(position, CHCNAV_CAMERA_MANAGER_WORK_MODE_SHOOT_PHOTO);
     if (ret != CHCNAV_RETURN_OK) {
-        printf("Set mounted position %d camera's work mode failed, error code: %d\r\n", position, ret);
+        CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's work mode failed, error code: %d", position, ret);
         return ret;
     }
 
@@ -62,7 +63,7 @@ chcnav_return_code_t test_camera_manager_start_interval_photo(CHCNAV_MOUNT_POSIT
     printf("Set work mode as shoot photo mode...\n");
     ret = chcnav_camera_manager_set_mode(position, CHCNAV_CAMERA_MANAGER_WORK_MODE_SHOOT_PHOTO);
     if (ret != CHCNAV_RETURN_OK) {
-        printf("Set mounted position %d camera's work mode failed, error code: %d\r\n", position, ret);
+        CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's work mode failed, error code: %d", position, ret);
         return ret;
     }
 
@@ -71,7 +72,7 @@ chcnav_return_code_t test_camera_manager_start_interval_photo(CHCNAV_MOUNT_POSIT
     printf("Set shoot photo mode interval param...\n");
     ret = chcnav_camera_manager_set_photo_time_interval_settings(position, setting);
     if (ret != CHCNAV_RETURN_OK) {
-        printf("Set mounted position %d camera's photo interval failed, error code: %d\r\n", position, ret);
+        CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's photo interval failed, error code: %d", position, ret);
         return ret;
     }
 
@@ -84,7 +85,7 @@ chcnav_return_code_t test_camera_manager_start_video_record(CHCNAV_MOUNT_POSITIO
 
     ret = chcnav_camera_manager_set_mode(position, CHCNAV_CAMERA_MANAGER_WORK_MODE_RECORD_VIDEO);
     if (ret != CHCNAV_RETURN_OK) {
-        printf("Set mounted position %d camera's work mode failed, error code: %d\r\n", position, ret);
+        CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's work mode failed, error code: %d", position, ret);
         return ret;
     }
 
@@ -103,14 +104,14 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             printf("--> Function: Set camera exposure mode to manual...\n");
             ret = chcnav_camera_manager_get_exposure_mode(position, &mode);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Get mounted position %d camera's exposure mode failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Get mounted position %d camera's exposure mode failed, error code: %d", position, ret);
                 return;
             }
 
             mode = CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_EXPOSURE_MANUAL;
             ret = chcnav_camera_manager_set_exposure_mode(position, mode);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's exposure mode failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's exposure mode failed, error code: %d", position, ret);
             }
             break;
         }
@@ -120,12 +121,12 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             printf("--> Function: Set camera shutter speed to 1/100 s...\n");
             ret = chcnav_camera_manager_set_exposure_mode(position, CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_EXPOSURE_MANUAL);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's exposure mode failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's exposure mode failed, error code: %d", position, ret);
                 return;
             }
             ret = chcnav_camera_manager_set_shutter_speed(position, shutter);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's shutter speed failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's shutter speed failed, error code: %d", position, ret);
             }
             break;
         }
@@ -136,12 +137,12 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             mode = CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_EXPOSURE_MANUAL;
             ret = chcnav_camera_manager_set_exposure_mode(position, mode);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's exposure mode failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's exposure mode failed, error code: %d", position, ret);
                 return;
             }
             ret = chcnav_camera_manager_set_aperture(position, CHCNAV_CAMERA_MANAGER_APERTURE_F_2);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's aperture failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's aperture failed, error code: %d", position, ret);
                 return;
             }
             break;
@@ -153,12 +154,12 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             mode = CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_PROGRAM_AUTO;
             ret = chcnav_camera_manager_set_exposure_mode(position, mode);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's exposure mode failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's exposure mode failed, error code: %d", position, ret);
                 return;
             }
             ret = chcnav_camera_manager_set_exposure_compensation(position, CHCNAV_CAMERA_MANAGER_EXPOSURE_COMPENSATION_P_1_0);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's EV failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's EV failed, error code: %d", position, ret);
                 return;
             }
             break;
@@ -170,12 +171,12 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             mode = CHCNAV_CAMERA_MANAGER_EXPOSURE_MODE_EXPOSURE_MANUAL;
             ret = chcnav_camera_manager_set_exposure_mode(position, mode);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's exposure mode failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's exposure mode failed, error code: %d", position, ret);
                 return;
             }
             ret = chcnav_camera_manager_set_ISO(position, CHCNAV_CAMERA_MANAGER_ISO_400);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's ISO failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's ISO failed, error code: %d", position, ret);
                 return;
             }
             break;
@@ -185,25 +186,25 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             printf("--> Function: camera zoom...\n");
             ret = chcnav_camera_manager_start_continuous_zoom(position, CHCNAV_CAMERA_ZOOM_DIRECTION_IN);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's zoom in failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's zoom in failed, error code: %d", position, ret);
                 return;
             }
             osal_handler->task_sleep_ms(5000);
             ret = chcnav_camera_manager_stop_continuous_zoom(position);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's stop zoom failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's stop zoom failed, error code: %d", position, ret);
                 return;
             }
             osal_handler->task_sleep_ms(1000);
             ret = chcnav_camera_manager_start_continuous_zoom(position, CHCNAV_CAMERA_ZOOM_DIRECTION_OUT);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's zoom out failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's zoom out failed, error code: %d", position, ret);
                 return;
             }
             osal_handler->task_sleep_ms(5000);
             ret = chcnav_camera_manager_stop_continuous_zoom(position);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's stop zoom failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's stop zoom failed, error code: %d", position, ret);
                 return;
             }
             break;
@@ -213,7 +214,7 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             printf("--> Function: Shoot Single photo...\n");
             ret = test_camera_manager_start_single_photo(position);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Start mounted position %d camera's single photo failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Start mounted position %d camera's single photo failed, error code: %d", position, ret);
                 return;
             }
             break;
@@ -223,13 +224,13 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             printf("--> Function: Shoot Interval photo...\n");
             ret = test_camera_manager_start_interval_photo(position);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Start mounted position %d camera's Interval photo failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Start mounted position %d camera's Interval photo failed, error code: %d", position, ret);
                 return;
             }
             osal_handler->task_sleep_ms(10*1000);
             ret = chcnav_camera_manager_stop_shoot_photo(position);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Stop mounted position %d camera's Interval photo failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Stop mounted position %d camera's Interval photo failed, error code: %d", position, ret);
                 return;
             }
             break;
@@ -239,13 +240,13 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             printf("--> Function: recording...\n");
             ret = test_camera_manager_start_video_record(position);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Start mounted position %d camera's record failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Start mounted position %d camera's record failed, error code: %d", position, ret);
                 return;
             }
             osal_handler->task_sleep_ms(10*1000);
             ret = chcnav_camera_manager_stop_record_video(position);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Stop mounted position %d camera's record failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Stop mounted position %d camera's record failed, error code: %d", position, ret);
                 return;
             }
             break;
@@ -256,7 +257,7 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             printf("--> Function: Get storage info...\n");
             ret = chcnav_camera_manager_get_storage_info(position, &storage_info);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Start mounted position %d camera's record failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Start mounted position %d camera's record failed, error code: %d", position, ret);
                 return;
             }
             printf("total capacity: %d, remainCapcity: %d", storage_info.total_capacity, storage_info.remain_capacity);
@@ -267,7 +268,7 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             printf("--> Function: Format SD Card...\n");
             ret = chcnav_camera_manager_format_storage(position);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Start mounted position %d camera's format SD Card failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Start mounted position %d camera's format SD Card failed, error code: %d", position, ret);
                 return;
             }
             printf("--> Function: Format SD Card successfully...\n");
@@ -278,7 +279,7 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             printf("--> Function: Reset camera setting...\n");
             ret = chcnav_camera_manager_reset_camera_settings(position);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Start mounted position %d camera's reset setting failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Start mounted position %d camera's reset setting failed, error code: %d", position, ret);
                 return;
             }
             printf("--> Function: Reset camera setting successfully...\n");
@@ -291,12 +292,12 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             mode = CHCNAV_CAMERA_MANAGER_METERING_MODE_AVERAGE;
             ret = chcnav_camera_manager_set_metering_mode(position, mode);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's metering mode failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's metering mode failed, error code: %d", position, ret);
                 return;
             }
             ret = chcnav_camera_manager_get_metering_mode(position, &mode);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Get mounted position %d camera's metering mode failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Get mounted position %d camera's metering mode failed, error code: %d", position, ret);
                 return;
             }
             printf("current metering mode is :%d\n", mode);
@@ -310,12 +311,12 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             printf("--> Function: Set spot metering mode point...\n");
             ret = chcnav_camera_manager_set_metering_mode(position, CHCNAV_CAMERA_MANAGER_METERING_MODE_SPOT);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's metering mode failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's metering mode failed, error code: %d", position, ret);
                 return;
             }
             ret = chcnav_camera_manager_get_metering_point_region_range(position, &hrz_num, &vtc_num);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Get mounted position %d camera's spot metering mode range failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Get mounted position %d camera's spot metering mode range failed, error code: %d", position, ret);
                 return;
             }
 
@@ -326,7 +327,7 @@ void run_camera_manager_sample(CHCNAV_MOUNT_POSITION_E position, CHCNAV_TEST_CAM
             printf("Try to set metering point as (%d, %d)", (uint8_t)x, (uint8_t)y);
             ret = chcnav_camera_manager_set_metering_point(position, x, y);
             if (ret != CHCNAV_RETURN_OK) {
-                printf("Set mounted position %d camera's spot metering mode range failed, error code: %d\r\n", position, ret);
+                CHCNAV_LOG_ERROR(demo, "Set mounted position %d camera's spot metering mode range failed, error code: %d", position, ret);
                 return;
             }
             break;
@@ -376,7 +377,7 @@ void chcnav_run_camera_manager_sample()
         }
 
         cameraMountPosition = static_cast<CHCNAV_MOUNT_POSITION_E>(atoi(mountPositionStr.c_str()));
-        if (cameraMountPosition > CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO3 || cameraMountPosition < CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO1) {
+        if (cameraMountPosition > CHCNAV_MOUNT_POSITION_EXTENSION_PORT4 || cameraMountPosition < CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO1) {
             printf("Input mount position is invalid");
             continue;
         } else {
@@ -393,7 +394,7 @@ void chcnav_run_camera_manager_sample()
     chcnav_return_code_t ret = chcnav_camera_manager_init();
     if (ret != CHCNAV_RETURN_OK)
     {
-        printf("Init camera manager failed, error code: %d\r\n", ret);
+        CHCNAV_LOG_ERROR(demo, "Init camera manager failed, error code: %d", ret);
         return;
     }
 
@@ -414,12 +415,12 @@ void chcnav_run_camera_manager_sample()
     ret = chcnav_camera_manager_get_camera_type(cameraMountPosition, &camera_type);
     if (ret != CHCNAV_RETURN_OK)
     {
-        printf("Get mounted position %d camera's type failed, error code: %d\r\n", cameraMountPosition, ret);
+        CHCNAV_LOG_ERROR(demo, "Get mounted position %d camera's type failed, error code: %d", cameraMountPosition, ret);
         goto ExitCameraManager;
     }
     ret = chcnav_camera_manager_get_firmware_version(cameraMountPosition, &version);
     if (ret != CHCNAV_RETURN_OK) {
-        printf("Get mounted position %d camera's firmware version failed, error code: %d\r\n", cameraMountPosition, ret);
+        CHCNAV_LOG_ERROR(demo, "Get mounted position %d camera's firmware version failed, error code: %d", cameraMountPosition, ret);
         goto ExitCameraManager;
     }
     printf("Mounted position %d camera's firmware is V%02d.%02d.%02d.%02d\r\n", cameraMountPosition,
@@ -428,7 +429,7 @@ void chcnav_run_camera_manager_sample()
     while(true)
     {
         chcnav_camare_manager_show_sample_list();
-        std::cout << "Please input number to select sample (input q to quit): ";
+        printf("Please input number to select sample (input q to quit): ");
         std::cin >> sampleSelectStr;
 
         if (sampleSelectStr == "q") {

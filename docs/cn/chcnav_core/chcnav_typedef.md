@@ -4,7 +4,7 @@ Typedef 的头文件为chcnav_typedef.h，本文档描述了chcnav_typedef.h 文
 # 宏定义
 - 圆周率
   ```
-  #define CHCNAV_PI (3.14159265358979323846f)
+  #define CHCNAV_PI (3.14159265358979323846)
   ```
 - 文件名最大长度
   ```
@@ -78,9 +78,10 @@ Typedef 的头文件为chcnav_typedef.h，本文档描述了chcnav_typedef.h 文
         CHCNAV_MOUNT_POSITION_UNKNOWN = 0,
         CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO1 = 1,
         CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO2 = 2,
-        CHCNAV_MOUNT_POSITION_PAYLOAD_PORT_NO3 = 3,
-        CHCNAV_MOUNT_POSITION_EXTENSION_PORT = 4,
-        CHCNAV_MOUNT_POSITION_EXTENSION_LITE_PORT = 5
+        CHCNAV_MOUNT_POSITION_EXTENSION_PORT1 = 3,
+        CHCNAV_MOUNT_POSITION_EXTENSION_PORT2 = 4,
+        CHCNAV_MOUNT_POSITION_EXTENSION_PORT3 = 5,
+        CHCNAV_MOUNT_POSITION_EXTENSION_PORT4 = 6,
     } CHCNAV_MOUNT_POSITION_E;
   ```
 - CHCNAV_UAV_SERIES_E
@@ -215,6 +216,15 @@ Typedef 的头文件为chcnav_typedef.h，本文档描述了chcnav_typedef.h 文
          /* Lock mode, fix gimbal attitude in the ground coordinate, ignoring movement of aircraft. */
         CHCNAV_GIMBAL_MODE_LOCK                        = 3,
     } CHCNAV_GIMBAL_MODE_E;
+  ```
+- CHCNAV_MOBILE_APP_LANGUAGE_E
+  地面站 App 系统语言，用于 Widget 多语言 UI 配置注册等。
+  ```
+    typedef enum {
+        CHCNAV_MOBILE_APP_LANGUAGE_ENGLISH = 0,   /* 英文 */
+        CHCNAV_MOBILE_APP_LANGUAGE_CHINESE = 1,   /* 中文 */
+        CHCNAV_MOBILE_APP_LANGUAGE_UNKNOWN = 255, /* 未知 */
+    } CHCNAV_MOBILE_APP_LANGUAGE_E;
   ```
 
 # 结构体
